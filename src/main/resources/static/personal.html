@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/element-ui/2.15.9/theme-chalk/index.css">
+    <style>
+        body {
+            background-color: rgb(241, 242, 243);
+        }
+
+        .el-header {
+            background-color: white;
+        }
+
+        .center {
+            width: 1200px;
+            margin: 0 auto
+        }
+
+        footer h3 {
+            color: white;
+        }
+
+        #footer_center p {
+            margin: 0;
+        }
+
+
+    </style>
+</head>
+<body>
+<div id="app">
+    <el-container>
+        <el-header style="height: 100px">
+            <el-row>
+                <el-col :span="6">
+                    <img src="img/icon.png" width="193px" height="65px">
+                </el-col>
+
+                <el-col :span="10">
+                    <el-menu class="el-menu-demo" mode="horizontal" active-text-color="orange" style="margin-top:5px">
+                        <el-menu-item index="1">首頁</el-menu-item>
+                        <el-menu-item index="2">食譜</el-menu-item>
+                        <el-menu-item index="3">影片</el-menu-item>
+                        <el-menu-item index="4">諮詢</el-menu-item>
+                    </el-menu>
+                </el-col>
+
+                <el-col :span="6">
+                    <div style="margin-top: 20px; margin-left: 10px">
+                        <el-input placeholder="請輸入對應的關鍵字" class="input-with-select">
+                            <el-button slot="append" icon="el-icon-search"></el-button>
+                        </el-input>
+                    </div>
+                </el-col>
+
+                <el-col :span="2" style="margin-top: 15px;">
+                    <el-popover
+                            placement="top-start"
+                            title="歡迎來到烘焙坊!"
+                            width="200"
+                            trigger="hover">
+                        <el-button slot="reference" style="border: 0px">
+                            <i class="el-icon-user" style="font-size: 30px"></i>
+                        </el-button>
+                        <el-button type="info">註冊</el-button>
+                        <el-button type="warning">登入</el-button>
+                    </el-popover>
+                </el-col>
+
+            </el-row>
+        </el-header>
+
+        <el-main class="center" style="margin-top: 30px">
+            <el-row gutter="10">
+                <el-col span="4">
+                    <el-card style="height: 500px">
+                        <el-menu @select="handleSelect" style="border: 0" default-active="1" active-text-color="orange">
+                            <el-menu-item index="1">
+                                个人信息
+                            </el-menu-item>
+                            <el-menu-item index="2">
+                                稿件管理
+                            </el-menu-item>
+                        </el-menu>
+                    </el-card>
+                </el-col>
+                <el-col span="20">
+                    <el-card style="height: 500px">
+                        <el-form label-width="80px">
+                            <el-form-item label="头像">
+                                <img :src="user.imgUrl"
+                                     style="float:left;width: 145px;height: 145px;border-radius: 10px">
+                                <!--***************上传组件开始******************-->
+                                <!--action设置上传图片的地址
+                                    name设置上传文件的参数名
+                                    limit设置上传文件的数量
+                                -->
+                                <el-upload style="float: left"
+                                           action="/v1/upload"
+                                           name="file"
+                                           limit="1"
+                                           list-type="picture-card"
+                                           :on-preview="handlePictureCardPreview"
+                                           :on-success="handleSuccess"
+                                           :on-remove="handleRemove">
+                                    <i class="el-icon-plus"></i>
+                                </el-upload>
+                                <el-dialog :visible.sync="dialogVisible">
+                                    <img width="100%" :src="dialogImageUrl" alt="">
+                                </el-dialog>
+                                <!--***************上传组件结束******************-->
+                            </el-form-item>
+                            <el-form-item label="昵称">
+                                <el-input style="width: 200px" placeholder="请输入昵称" v-model="user.nickName"></el-input>
+                            </el-form-item>
+                            <el-form-item label="用户名">
+                                <el-input style="width: 200px" v-model="user.username" disabled></el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="save()">保存信息</el-button>
+                            </el-form-item>
+                        </el-form>
+                    </el-card>
+                </el-col>
+            </el-row>
+
+        </el-main>
+        <el-footer style="background-color: #2f3234;
+        height: 280px;padding: 50px 0">
+            <div class="center" style="color: #666;text-align: center">
+                <el-row gutter="20">
+                    <el-col span="8">
+                        <img src="imgs/icon.png">
+                        <p>教程灵感就看烘焙坊</p>
+                        <p>烘焙行业网络社区平台</p>
+                        <p>全国百城上千个职位等你来</p>
+                    </el-col>
+                    <el-col span="8">
+                        <el-row id="footer_center">
+                            <el-col span="8">
+                                <h3>关于我们</h3>
+                                <p>关于我们</p>
+                                <p>烘焙学院</p>
+                                <p>烘焙食谱</p>
+                                <p>分类信息</p>
+                                <p>求职招聘</p>
+                                <p>社区交流</p>
+                            </el-col>
+                            <el-col span="8">
+                                <h3>服务与支持</h3>
+                                <p>联系我们</p>
+                                <p>广告投放</p>
+                                <p>用户协议</p>
+                                <p>友情链接</p>
+                                <p>在线反馈</p>
+                                <p>我发投稿</p>
+                            </el-col>
+                            <el-col span="8">
+                                <h3>底部导航</h3>
+                                <p>Archiver</p>
+                                <p>手机版</p>
+                                <p>小黑屋</p>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col span="8">
+                        <div style="font-size: 60px;">
+                            <span style="color: orange">烘焙</span>坊
+                        </div>
+                        <p>烘焙行业网络社区平台</p>
+                    </el-col>
+                </el-row>
+            </div>
+        </el-footer>
+    </el-container>
+</div>
+</body>
+<!-- import Vue before Element -->
+<script src="https://cdn.staticfile.org/vue/2.6.14/vue.min.js"></script>
+<!-- import JavaScript -->
+<script src="https://cdn.staticfile.org/element-ui/2.15.9/index.min.js"></script>
+<!--引入Axios-->
+<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+<script src="js/my-header.js"></script>
+<script>
+    let v = new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                dialogImageUrl: '',
+                dialogVisible: false,
+                user: localStorage.user ? JSON.parse(localStorage.user) : "",
+                imgUrl:""
+            }
+        },
+        methods: {
+            save(){
+                //u代表的是需要修改的用户数据
+                let u = {id:v.user.id,nickName:v.user.nickName};
+                if (v.imgUrl!=""){//判断如果选择了图片
+                    //选择了图片才需要将修改后的图片路径保存到u对象当中
+                    u.imgUrl = v.imgUrl;
+                    //把选择的图片赋值给user对象,为了后面更新本地localStorage里面的数据
+                    v.user.imgUrl = v.imgUrl;
+                }
+                //发请求修改
+                axios.post("/v1/users/update",u).then(function (response) {
+                    if (response.data.code==1){
+                        //更新localStorage里面的用户信息
+                        localStorage.user = JSON.stringify(v.user);
+                        //刷新页面
+                        location.reload();
+                    }
+                })
+
+            },
+            handleSuccess(response,file,fileList){
+                //response代表服务器响应的JsonResult
+                //response.data得到上传成功时服务器响应的图片路径
+                v.imgUrl = response.data;
+            },
+            handleSelect(key, keyPath) {
+                if (key == 2) {
+                    location.href = "articleManagement.html";
+                }
+            },
+            handleRemove(file, fileList) {
+                v.imgUrl="";
+                console.log(file, fileList);
+                //发出删除文件的请求 需要将图片的路径传递给服务器
+                //file.response代表服务器响应的内容(JsonResult)
+                axios.post("/v1/remove?url="+file.response.data).then(
+                    function (response) {
+                        //response.data代表服务器响应的内容
+                    if (response.data.code==1){
+                        v.$message.success("服务器文件删除成功!");
+                    }
+                })
+            },
+            handlePictureCardPreview(file) {
+                this.dialogImageUrl = file.url;
+                this.dialogVisible = true;
+            }
+
+        }
+    })
+</script>
+</html>

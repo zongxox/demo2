@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>Clothique註冊</title>
+    <!-- 引入 jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: sans-serif;
+    }
+
+    .col-12 { flex: 0 0 50%; max-width: 50%; }
+    .col-8 { flex: 0 0 33.33%; max-width: 33.33%; }
+
+    .main {
+      margin-top: 30px;
+    }
+
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    form {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .form-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .form-header h1 {
+      font-size: 28px;
+    }
+
+    .form-header a {
+      text-decoration: none;
+      color: #409eff;
+      position: relative;
+      top: 20px;
+    }
+
+    .form-group {
+      margin: 15px 0;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 8px;
+    }
+
+    .form-buttons {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px; /* 與上方輸入欄的間距，可調整 */
+    }
+  </style>
+</head>
+<body>
+<!--引入header-->
+<div id="header-container"></div>
+
+<div class="main center row">
+    <div class="col col-12">
+        <div class="card">
+            <img src="images/reglog.avif" width="100%" alt="註冊圖">
+        </div>
+    </div>
+    <div class="col col-12">
+        <form>
+            <div class="form-header">
+                <h1>立即註冊</h1>
+                <a href="login.html">已有帳號?現在登入</a>
+            </div>
+            <div class="form-group">
+                <label for="username">帳號</label>
+                <input type="text" id="username" placeholder="請輸入帳號">
+            </div>
+            <div class="form-group">
+                <label for="password">密碼</label>
+                <input type="password" id="password" placeholder="請輸入密碼">
+            </div>
+            <div class="form-buttons">
+                <button type="submit" class="btn">註冊</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+
+<script>
+<!--引入header-->
+    $(function () {
+    $("#header-container").load("header.html");
+  });
+</script>
+
+</html>

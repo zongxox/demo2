@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/element-ui/2.15.9/theme-chalk/index.css">
+</head>
+<body>
+<div id="app">
+    <el-container>
+        <el-header height="70px" style="background-color: #386582">
+            <h1 style="color: white;
+            font-size: 30px;margin: 0;line-height: 70px">烘培坊後臺管理系統
+                <span style="float: right;font-size: 20px">
+                    歡迎{{user.nickName}}回來!
+                    <a href="javascript:void(0)" @click="logout()" style="color: orange">退出登入</a>
+                </span>
+            </h1>
+        </el-header>
+        <el-container>
+            <el-aside width="200px">
+                <el-menu :default-active="currentIndex"
+                         @select="handleSelect" active-text-color="orange">
+                    <img src="imgs/icon.png" width="150">
+                    <el-divider></el-divider>
+                    <el-menu-item index="1"><i class="el-icon-user">用戶管理</i></el-menu-item>
+                    <el-menu-item index="2"><i class="el-icon-picture">輪播圖</i></el-menu-item>
+                    <el-menu-item index="3"><i class="el-icon-s-order">烘培食譜</i></el-menu-item>
+                    <el-menu-item index="4"><i class="el-icon-video-camera">烘培影片</i></el-menu-item>
+                    <el-menu-item index="5"><i class="el-icon-info">行業資訊</i></el-menu-item>
+                </el-menu>
+            </el-aside>
+            <el-main>
+                <!--用戶表格開始-->
+                <el-table v-if="currentIndex==1" :data="userArr">
+                    <el-table-column type="index" label="編號"></el-table-column>
+                    <el-table-column prop="userName" label="用戶名"></el-table-column>
+                    <el-table-column prop="nickName" label="暱稱"></el-table-column>
+                    <el-table-column label="頭像">
+                        <template slot-scope="scope">
+                            <el-avatar :src="scope.row.imgUrl"></el-avatar>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="管理員">
+                        <template slot-scope="scope">
+                            <!--@change 值改變事件-->
+                            <el-switch :disabled="user.id==scope.row.id" @change="change(scope.row)" v-model="scope.row.isAdmin"></el-switch>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="createTime" label="創建時間"></el-table-column>
+                    <el-table-column label="操作">
+                        <template slot-scope="scope">
+                            <el-button :disabled="user.id==scope.row.id" type="danger" @click="deleteUser(scope.$index,scope.row)" size="mini">刪除</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <!--用戶表格結束-->
+                <!--輪播圖表格開始-->
+                <el-table v-if="currentIndex==2" :data="bannerArr">
+                    <el-table-column type="index" label="編號"></el-table-column>
+                    <el-table-column label="輪播圖">
+                        <template slot-scope="scope">
+                            <img :src="scope.row.imgUrl" width="200">
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="createTime" label="創建時間"></el-table-column>
+                    <el-table-column label="操作">
+                        <template slot-scope="scope">
+                            <el-button @click="bannerDelete(scope.$index,scope.row)" type="danger" size="mini">刪除</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <!--輪播圖表格結束-->
+                <!--内容表格開始-->
+                <el-table v-if="currentIndex>2" :data="contentArr">
+                    <el-table-column type="index" label="編號"></el-table-column>
+                    <el-table-column prop="title" label="標題"></el-table-column>
+                    <el-table-column label="封面" width="100px">
+                        <template slot-scope="scope">
+                            <img :src="scope.row.imgUrl" width="60px">
+                        </template>
+                    </el-table-column>
+                    <el-table-column v-if="currentIndex!=4" prop="brief" label="摘要" width="300px"></el-table-column>
+                    <el-table-column prop="categoryName" label="分類" width="80px"></el-table-column>
+                    <el-table-column prop="viewCount" label="瀏覽量" width="50px"></el-table-column>
+                    <el-table-column prop="commentCount" label="回復量" width="50px"></el-table-column>
+                    <el-table-column prop="createTime" label="創建時間"></el-table-column>
+                    <el-table-column label="操作">
+                        <template slot-scope="scope">
+                            <el-button type="success" @click="contentEdit(scope.$index,scope.row)" size="mini">編輯</el-button>
+                            <el-button type="danger" @click="contentDelete(scope.$index,scope.row)" size="mini">刪除</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <!--内容表格結束-->
+            </el-main>
+        </el-container>
+    </el-container>
+</div>
+</body>
+<!-- import Vue before Element -->
+<script src="https://cdn.staticfile.org/vue/2.6.14/vue.min.js"></script>
+<!-- import JavaScript -->
+<script src="https://cdn.staticfile.org/element-ui/2.15.9/index.min.js"></script>
+<!--引入Axios-->
+<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+<script>
+    let v = new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                currentIndex:"1",
+                userArr:[],
+                bannerArr:[],
+                contentArr:[],
+                user:localStorage.user?JSON.parse(localStorage.user):""
+            }
+        },
+        methods: {
+            contentEdit(i,c){
+                let type = v.currentIndex-2;
+                location.href = "/postArticle.html?type="+type+"&id="+c.id;
+            },
+            contentDelete(i,c){
+                if (confirm("你確定刪除此文章嗎?")){
+                    axios.post("/v1/contents/"+c.id+"/delete").then(function (response) {
+                        if (response.data.code==1){
+                            v.contentArr.splice(i,1);
+                        }
+                    })
+                }
+            },
+            bannerDelete(i,b){
+                if (confirm("你確定刪除此輪播圖嗎?")){
+                    axios.post("/v1/banners/"+b.id+"/delete").then(function (response) {
+                        if (response.data.code==1){
+                            v.bannerArr.splice(i,1);
+                        }
+                    })
+                }
+            },
+            logout() {
+                if (confirm("你確定退出登入嗎?")) {
+                    axios.get("/v1/users/logout").then(function () {
+                        localStorage.clear();
+                        location.href = "/";
+                    })
+                }
+            },
+            change(user){
+                if (user.id==v.user.id&&!user.isAdmin){
+                    v.$message.error("不能取消自己的管理員狀態!");
+                    user.isAdmin=true;
+                    return;
+                }
+
+                //發請求修改用戶的管理員狀態
+                axios.post("/v1/users/"+user.id+"/"+(user.isAdmin?1:0)+"/change")
+                            .then(function (response) {
+                    if (response.data.code==1){
+                        if (user.isAdmin){
+                            v.$message.success("設置為管理員!");
+                        }else{
+                            v.$message.success("取消管理員!");
+                        }
+                    }
+                })
+            },
+            handleSelect(key,keyPath){
+                location.href = "/admin.html?key="+key;
+            },
+            deleteUser(i,user){
+                //判斷刪除的用戶是否是當前登入的用戶
+                if (v.user.id==user.id){
+                    v.$message.error("不能刪除自己!");
+                    return;
+                }
+                if (confirm("你確定要刪除"+user.nickName+"嗎?")){
+                    //發出刪除請求
+                    axios.post("/v1/users/"+user.id+"/delete").then(function (response) {
+                        if (response.data.code==1){
+                            v.userArr.splice(i,1);
+                        }
+                    })
+                }
+
+            }
+        },
+        created:function () {
+            if (location.search.includes("key")){
+                let key = new URLSearchParams(location.search).get("key");
+                this.currentIndex = key;
+                if (key>2){
+                    let type = key-2;
+                    axios.get("/v1/contents/"+type+"/admin").then(function (response) {
+                        if (response.data.code==1){
+                            v.contentArr = response.data.data;
+                        }
+                    })
+                }
+            }
+
+
+
+            //請求所有用戶信息
+            axios.get("/v1/users/").then(function (response) {
+                if (response.data.code==1){
+                    v.userArr = response.data.data;
+                }else{
+                    alert("無權訪問!");
+                    location.href="/";
+                }
+            })
+
+            //發請求獲取輪播圖數據
+            axios.get("/v1/banners/admin").then(function (response) {
+                if (response.data.code==1){
+                    v.bannerArr = response.data.data;
+                }
+            })
+        }
+    })
+</script>
+</html>

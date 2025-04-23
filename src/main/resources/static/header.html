@@ -1,0 +1,108 @@
+<!-- header.html -->
+<style>
+    * {
+      box-sizing: border-box;
+    }
+
+  .center {
+    width: 1200px;
+    margin: 0 auto;
+  }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .col {
+    padding: 10px;
+  }
+  .col-6 { flex: 0 0 25%; max-width: 25%; }
+  .col-10 { flex: 0 0 41.66%; max-width: 41.66%; }
+  .col-2 { flex: 0 0 8.33%; max-width: 8.33%; }
+
+  .menu {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-top: 5px;
+  }
+  .menu a {
+    text-decoration: none;
+    color: #333;
+  }
+
+  .search-bar {
+    margin-top: 20px;
+    display: flex;
+  }
+  .search-bar input {
+    padding: 6px;
+    flex: 1;
+  }
+  .search-bar button {
+    padding: 6px 12px;
+  }
+
+  .user {
+    margin-top: 15px;
+    position: relative;
+  }
+  .user-icon {
+    font-size: 30px;
+    cursor: pointer;
+  }
+  .popover {
+    display: none;
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    width: 200px;
+    padding: 10px;
+    top: 40px;
+  }
+  .user:hover .popover {
+    display: block;
+  }
+
+  .btn {
+    background: #409eff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 10px;
+  }
+    a {
+      text-decoration: none;
+    }
+</style>
+
+<div class="header row center">
+    <div class="col col-6">
+        <img src="images/logo.svg" width="193" height="65" alt="Logo">
+    </div>
+    <div class="col col-10">
+        <nav class="menu">
+            <a href="index.html">首頁</a>
+            <a href="#">男性</a>
+            <a href="#">女性</a>
+            <a href="#">兒童</a>
+            <a href="#">毛衣</a>
+            <a href="#">連帽杉</a>
+        </nav>
+    </div>
+    <div class="col col-6">
+        <div class="search-bar">
+            <input type="text" placeholder="請輸入對應的關鍵字">
+            <button>🔍</button>
+        </div>
+    </div>
+    <div class="col col-2 user">
+        <span class="user-icon">👤</span>
+        <div class="popover">
+            <p>歡迎來到Clothique!</p>
+            <a href="reg.html" class="btn">註冊</a>
+            <a href="login.html" class="btn" style="background: orange;">登入</a>
+        </div>
+    </div>
+</div>
