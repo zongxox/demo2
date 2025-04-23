@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Clothique登入</title>
     <style>
     body {
       font-family: Arial, sans-serif;
@@ -71,6 +72,19 @@
       font-size: 14px;
       color: red;
     }
+
+      .form-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+      .form-header a {
+      text-decoration: none;
+      color: #409eff;
+      position: relative;
+      top: 20px;
+      left:90%;
+    }
   </style>
 </head>
 <body>
@@ -90,6 +104,9 @@
             </div>
             <div style="display: flex; justify-content: center;">
                 <button type="submit">登入</button>
+            </div>
+            <div class="form-header">
+                <a href="login.html">忘記密碼</a>
             </div>
             <div class="message" id="message"></div>
         </form>

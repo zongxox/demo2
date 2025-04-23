@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Clothique會員中心</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* 側邊欄樣式 */
+        .sidebar {
+            width: 250px;
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .sidebar h2 {
+            margin: 0;
+            padding-bottom: 20px;
+            font-size: 20px;
+            text-align: center;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            color: white;
+            padding: 10px;
+            width: 100%;
+            border-bottom: 1px solid #555;
+            transition: background-color 0.3s ease;
+        }
+
+        .sidebar a:hover {
+            background-color: #444;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+
+        .profile-info {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .profile-info h3 {
+            margin-top: 0;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .profile-info p {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .profile-info .btn {
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .profile-info .btn:hover {
+            background-color: #218838;
+        }
+
+        /* 訂單管理區域 */
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .orders-table th, .orders-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .orders-table th {
+            background-color: #f8f9fa;
+        }
+
+        /* 編輯資料表單 */
+        .edit-profile-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .edit-profile-form label {
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .edit-profile-form input {
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .cancel-btn {
+            background-color: #dc3545;
+        }
+
+        .cancel-btn:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- 側邊欄 -->
+    <div class="sidebar">
+        <h2>會員中心</h2>
+        <a href="#profile">會員資料</a>
+        <a href="#orders">我的訂單</a>
+        <a href="index.html">首頁</a>
+        <a href="index.html">登出</a>
+    </div>
+
+    <!-- 主要內容 -->
+    <div class="main-content">
+        <!-- 會員資料區 -->
+        <div id="profile" class="content">
+            <div class="profile-info">
+                <h3>個人資料</h3>
+                <p><strong>姓名：</strong> 張三</p>
+                <p><strong>電子信箱：</strong> zhangsan@example.com</p>
+                <p><strong>註冊日期：</strong> 2022-03-15</p>
+                <button class="btn" onclick="editProfile()">編輯資料</button>
+            </div>
+        </div>
+
+        <!-- 編輯資料區 -->
+        <div id="edit-profile" class="content" style="display: none;">
+            <h3>編輯資料</h3>
+            <form class="edit-profile-form">
+                <label for="name">姓名</label>
+                <input type="text" id="name" name="name" placeholder="請輸入姓名" value="張三" required="required">
+
+                <label for="email">電子信箱</label>
+                <input type="email" id="email" name="email" placeholder="請輸入電子郵件" value="zhangsan@example.com" required="required">
+
+                <label for="phone">電話</label>
+                <input type="text" id="phone" name="phone" placeholder="請輸入電話" value="0912345678" required="required">
+
+                <label for="password">新密碼</label>
+                <input type="password" id="password" name="password" placeholder="請輸入新密碼" required="required">
+
+                <div style="display: flex; justify-content: space-between;">
+                    <button type="submit" class="btn">保存修改</button>
+                    <button type="button" class="btn cancel-btn" onclick="cancelEdit()">取消</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- 我的訂單區 -->
+        <div id="orders" class="content">
+            <h3>我的訂單</h3>
+            <table class="orders-table">
+                <thead>
+                <tr>
+                    <th>訂單編號</th>
+                    <th>商品名稱</th>
+                    <th>數量</th>
+                    <th>價格</th>
+                    <th>狀態</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>#12345</td>
+                    <td>產品 A</td>
+                    <td>2</td>
+                    <td>$500</td>
+                    <td>已發貨</td>
+                </tr>
+                <tr>
+                    <td>#12346</td>
+                    <td>產品 B</td>
+                    <td>1</td>
+                    <td>$300</td>
+                    <td>待處理</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    function editProfile() {
+        document.getElementById('profile').style.display = 'none';
+        document.getElementById('edit-profile').style.display = 'block';
+    }
+
+    function cancelEdit() {
+        document.getElementById('edit-profile').style.display = 'none';
+        document.getElementById('profile').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
