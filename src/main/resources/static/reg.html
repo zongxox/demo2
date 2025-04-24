@@ -100,8 +100,8 @@
             </div>
 
             <div class="form-group">
-                <label for="username">姓名</label>
-                <input type="text" id="username" placeholder="請輸入姓名" required="required">
+                <label for="name">姓名</label>
+                <input type="text" id="name" placeholder="請輸入姓名" required="required">
             </div>
             <div class="form-group">
                 <label for="tel">電話</label>
@@ -114,7 +114,7 @@
             </div>
 
             <div class="form-buttons">
-                <button type="submit" class="btn">註冊</button>
+                <button type="submit" id="bt" class="btn">註冊</button>
             </div>
         </form>
     </div>
@@ -125,6 +125,32 @@
 <!--引入header-->
     $(function () {
     $("#header-container").load("header.html");
+        const url = "/user/saveUser"
+        $("#bt").on("click", function(event) {
+<!--阻止預設送出表單-->
+        event.preventDefault();
+<!--把id封裝成json物件,傳遞到後端-->
+        const data = {
+        account: $("#account").val(),
+        password: $("#password").val(),
+        name: $("#name").val(),
+        phone: $("#tel").val(),
+        email: $("#email").val()
+         };
+
+        $.ajax({
+            url,
+            type: 'POST',
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function(response) {
+            alert("註冊成功！即將跳轉至登入頁面");
+                    // 成功後進行頁面跳轉
+                    window.location.href = "/login.html"; // 跳轉到登入頁面
+                },
+            error: err => console.log(err)
+        })
+    })
   });
 </script>
 

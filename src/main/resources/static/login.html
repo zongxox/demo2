@@ -96,14 +96,14 @@
         <h1>立即登入</h1>
         <form id="login-form">
             <div class="form-fields">
-                <label for="username">帳號</label>
-                <input type="text" id="username" name="username" placeholder="請輸入帳號" required="required">
+                <label for="account">帳號</label>
+                <input type="text" id="account" name="account" placeholder="請輸入帳號" required="required">
 
                 <label for="password">密碼</label>
                 <input type="password" id="password" name="password" placeholder="請輸入密碼" required="required">
             </div>
             <div style="display: flex; justify-content: center;">
-                <button type="submit">登入</button>
+                <button type="button" id="bt" class="btn">登入</button>
             </div>
             <div class="form-header">
                 <a href="login2.html">忘記密碼</a>
@@ -114,9 +114,39 @@
 </div>
 
 <script>
-  <!--引入header-->
+//引入header
     $(function () {
     $("#header-container").load("header.html");
+
+        const url = "/user/getUserByAccountPassword"
+        $("#bt").on("click", function(event) {
+//阻止預設送出表單
+        event.preventDefault();
+//把id封裝成json物件,傳遞到後端
+        const data = {
+        account: $("#account").val(),
+        password: $("#password").val()
+        };
+
+        $.ajax({
+            url,
+            type: 'POST',
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function(response) {
+            if(response=="登入成功"){
+             alert("登入成功！即將跳轉至會員中心");
+                    // 成功後進行頁面跳轉
+                    window.location.href = "/articleManagement.html"; // 跳轉到會員中心
+            }else{
+                $("#message").text("登入失敗"); // 顯示登入失敗
+            }
+            },
+           error: function(xhr) {
+        $("#message").text("系統錯誤，請稍後再試");
+            }
+        })
+    })
   });
 </script>
 
