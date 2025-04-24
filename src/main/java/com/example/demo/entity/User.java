@@ -12,7 +12,6 @@ public class User {
     private String name;
     private String phone;
     private String email;
-    private Integer is_member;
     private Date created_time;
     private Date updated_time;
 

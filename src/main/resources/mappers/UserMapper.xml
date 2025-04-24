@@ -18,8 +18,8 @@
     </select>
 <!--新增用戶-->
     <insert id="saveUser">
-        INSERT INTO user (id,account,password,name,phone,email,is_member,created_time,updated_time)
-        VALUES(null,#{account},#{password},#{name},#{phone},#{email},#{is_member},#{created_time},#{updated_time})
+        INSERT INTO user (id,account,password,name,phone,email,created_time,updated_time)
+        VALUES(null,#{account},#{password},#{name},#{phone},#{email},#{created_time},#{updated_time})
     </insert>
 
     <update id="updateUser">
