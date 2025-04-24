@@ -114,7 +114,7 @@
             </div>
 
             <div class="form-buttons">
-                <button type="submit" id="bt" class="btn">註冊</button>
+                <button type="submit" class="btn">註冊</button>
             </div>
         </form>
     </div>
@@ -126,7 +126,7 @@
     $(function () {
     $("#header-container").load("header.html");
         const url = "/user/saveUser"
-        $("#bt").on("click", function(event) {
+        $("form").on("submit", function(event) {
 <!--阻止預設送出表單-->
         event.preventDefault();
 <!--把id封裝成json物件,傳遞到後端-->

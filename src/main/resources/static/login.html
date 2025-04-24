@@ -94,7 +94,7 @@
 <div class="main">
     <div class="card">
         <h1>立即登入</h1>
-        <form id="login-form">
+        <form>
             <div class="form-fields">
                 <label for="account">帳號</label>
                 <input type="text" id="account" name="account" placeholder="請輸入帳號" required="required">
@@ -103,7 +103,7 @@
                 <input type="password" id="password" name="password" placeholder="請輸入密碼" required="required">
             </div>
             <div style="display: flex; justify-content: center;">
-                <button type="button" id="bt" class="btn">登入</button>
+                <button type="submit" id="bt" class="btn">登入</button>
             </div>
             <div class="form-header">
                 <a href="login2.html">忘記密碼</a>
@@ -119,7 +119,7 @@
     $("#header-container").load("header.html");
 
         const url = "/user/getUserByAccountPassword"
-        $("#bt").on("click", function(event) {
+        $("form").on("submit", function(event) {
 //阻止預設送出表單
         event.preventDefault();
 //把id封裝成json物件,傳遞到後端
