@@ -30,11 +30,16 @@ public class JsonResult {
     }
 
     //初始化 成功的回應SUCCESS
-    public JsonResult(Object data) {
+    private JsonResult(Object data) {
         this.code = StatusCode.SUCCESS.getCode();
         this.msg = StatusCode.SUCCESS.getMsg();
         this.data = data;
     }
+
+    public static JsonResult ok(Object data){
+        return new JsonResult(data);
+    }
+
     private JsonResult(){
         this.code = StatusCode.SUCCESS.getCode();
         this.msg = StatusCode.SUCCESS.getMsg();
@@ -44,7 +49,5 @@ public class JsonResult {
         return new JsonResult();
     }
 
-    public static JsonResult ok(Object data){
-        return new JsonResult(data);
-    }
+
 }

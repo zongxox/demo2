@@ -224,7 +224,6 @@
         document.getElementById('edit-profile').style.display = 'none';//隱藏編輯資料
         document.getElementById('profile').style.display = 'block';//顯示會員資料
     }
-
     $(function () {
         const user = JSON.parse(localStorage.getItem("user"));//儲存後端傳過來的user資料
     if (user) {
@@ -236,6 +235,7 @@
         window.location.href = "/login.html";
         }
     });
+
 
 </script>
 

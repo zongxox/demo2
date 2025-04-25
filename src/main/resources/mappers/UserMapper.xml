@@ -21,7 +21,7 @@
         SELECT account FROM user WHERE account = #{account}
     </select>
 
-<!--新增用戶-->
+<!--新增註冊-->
     <insert id="saveUser">
         INSERT INTO user (id,account,password,name,phone,email,created_time,updated_time)
         VALUES(null,#{account},#{password},#{name},#{phone},#{email},#{created_time},#{updated_time})

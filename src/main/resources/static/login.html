@@ -139,7 +139,7 @@ $(function () {
                 if(response.code === 1){
                     alert("登入成功！即將跳轉至會員中心");
                     // 成功後進行頁面跳轉
-                    window.location.href = "/articleManagement.html"; // 跳轉到會員中心
+                    window.location.href = "/user.html"; // 跳轉到會員中心
                 } else {
                     // 顯示登入失敗訊息
                     $("#message").text(response.msg);

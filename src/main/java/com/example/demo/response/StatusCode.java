@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 //枚舉類 定義回應的長量信息 狀態碼,回應信息
-@AllArgsConstructor //全參構造
-@NoArgsConstructor //無參構造
+@AllArgsConstructor //全參建構子
+@NoArgsConstructor //無參建構子
 @Getter
 public enum StatusCode {
     //定義枚舉實例

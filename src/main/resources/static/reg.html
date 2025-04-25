@@ -155,7 +155,7 @@ $(function () {
             data: JSON.stringify(data),
             success: function(response) {
                 // 根據後端返回的code來判斷
-                if (response.code === 1) {
+                if (response.code == 1) {
                     // 註冊成功的處理
                     alert("註冊成功！即將跳轉至登入頁面");
                     window.location.href = "/login.html"; // 跳轉到登入頁面
