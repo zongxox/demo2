@@ -159,7 +159,7 @@ $(function () {
                     // 註冊成功的處理
                     alert("註冊成功！即將跳轉至登入頁面");
                     window.location.href = "/login.html"; // 跳轉到登入頁面
-                } else if (response.code === 1004) {
+                } else if (response.code === 1003) {
                     // 如果回應是帳號已存在，顯示錯誤訊息
                     $("#message").text(response.msg);
                 } else {

@@ -10,16 +10,15 @@ import lombok.NoArgsConstructor;
 @Getter
 public enum StatusCode {
     //定義枚舉實例
-    SUCCESS(1,"OK"),
-    NOT_LOGIN(1000,"登入失敗"),
-    LOGIN_SUCCESS(1001, "未成功"),
-    PASSWORD_ERROR(1002, "密碼錯誤"),
-    ACCOUTNT_PASSWORD_ERROR(1003,"帳號與密碼錯誤"),
-    ACCOUTNT_ALREADY_EXISTS(1004, "帳號已存在"),
-    FORBIDDEN_ERROR(1005, "無權訪問"),
-    OPERATION_SUCCESS(2001, "操作成功"),
-    OPERATION_FAILED(2002, "操作失敗"),
-    VALIDATE_ERROR(3002, "參數校驗失敗");
+    SUCCESS(1, "操作成功"),
+    NOT_LOGIN(1001, "尚未登入"),
+    ACCOUNT_PASSWORD_ERROR(1002, "帳號或密碼錯誤"),
+    ACCOUNT_ALREADY_EXISTS(1003, "帳號已存在"),
+    OPERATION_FAILED(1004, "操作失敗"),
+    PARAM_ERROR(1005, "參數錯誤"),
+    NO_PERMISSION(1006, "沒有權限"),
+    SYSTEM_ERROR(1007, "系統錯誤，請稍後再試");
     private Integer code; //回應狀態碼
     private String msg; //回應狀態信息結果
+
 }

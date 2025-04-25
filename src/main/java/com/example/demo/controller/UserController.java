@@ -26,15 +26,15 @@ public class UserController {
 
         //查詢帳號是否重複
         User existingUser = userMapper.getUserByAccount(user.getAccount());
-        if (existingUser != null) {
-            return new JsonResult(StatusCode.ACCOUTNT_ALREADY_EXISTS);
+        if (existingUser != null) {//如果重複
+            return new JsonResult(StatusCode.ACCOUNT_ALREADY_EXISTS);
         }
-        //新增
+        //不重複就,新增
         int rows = userMapper.saveUser(user);
         if(rows>0){
             return JsonResult.ok();
         }else {
-            return new JsonResult(StatusCode.OPERATION_FAILED);
+            return new JsonResult(StatusCode.OPERATION_FAILED);//操作失敗
         }
     }
 
@@ -44,10 +44,10 @@ public class UserController {
     public JsonResult getUserByAccountPassword(@RequestBody User user){
         //接收前端傳過來的帳號密碼,查詢是否有該帳號
         User userByAccountPassword = userMapper.getUserByAccountPassword(user.getAccount(),user.getPassword());
-        if(userByAccountPassword!=null){
-            return JsonResult.ok();
-        }else {
-            return new JsonResult(StatusCode.ACCOUTNT_PASSWORD_ERROR);
+        if(userByAccountPassword!=null){//判斷如果數據庫有該帳號及密碼
+            return JsonResult.ok();//成功
+        }else {//沒有則失敗
+            return new JsonResult(StatusCode.ACCOUNT_PASSWORD_ERROR);//帳號密碼錯誤
         }
     }
 
