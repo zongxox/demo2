@@ -114,18 +114,19 @@
 </div>
 
 <script>
-//引入header
-    $(function () {
+// 引入header
+$(function () {
     $("#header-container").load("header.html");
 
-        const url = "/user/getUserByAccountPassword"
-        $("form").on("submit", function(event) {
-//阻止預設送出表單
+    const url = "/user/getUserByAccountPassword";
+    $("form").on("submit", function(event) {
+        // 阻止預設送出表單
         event.preventDefault();
-//把#id封裝成json物件,傳遞到後端
+
+        // 把#id封裝成json物件, 傳遞到後端
         const data = {
-        account: $("#account").val(),
-        password: $("#password").val()
+            account: $("#account").val(),
+            password: $("#password").val()
         };
 
         $.ajax({
@@ -134,21 +135,25 @@
             contentType: "application/json",
             data: JSON.stringify(data),
             success: function(response) {
-            if(response.message =="登入成功"){
-             alert("登入成功！即將跳轉至會員中心");
+                // 檢查 response.code 是否是 1 (登入成功)
+                if(response.code === 1){
+                    alert("登入成功！即將跳轉至會員中心");
                     // 成功後進行頁面跳轉
                     window.location.href = "/articleManagement.html"; // 跳轉到會員中心
-            }else{
-                $("#message").text("帳號或密碼錯誤,請重新輸入!!"); // 顯示登入失敗
-            }
+                } else {
+                    // 顯示登入失敗訊息
+                    $("#message").text(response.msg);
+                }
             },
-           error: function(xhr) {
-        $("#message").text("系統錯誤，請稍後再試");
+            error: function(xhr) {
+                // 顯示系統錯誤訊息
+                $("#message").text("系統錯誤，請稍後再試");
             }
-        })
-    })
-  });
+        });
+    });
+});
 </script>
+
 
 </body>
 </html>

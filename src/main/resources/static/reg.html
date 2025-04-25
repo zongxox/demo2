@@ -71,6 +71,13 @@
       justify-content: flex-end;
       margin-top: 20px; /* 與上方輸入欄的間距，可調整 */
     }
+
+        .message {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+      color: red;
+    }
   </style>
 </head>
 <body>
@@ -116,27 +123,30 @@
             <div class="form-buttons">
                 <button type="submit" class="btn">註冊</button>
             </div>
+            <div class="message" id="message"></div>
         </form>
     </div>
 </div>
 </body>
 
 <script>
-//引入header
-    $(function () {
+// 引入header
+$(function () {
     $("#header-container").load("header.html");
-        $("form").on("submit", function(event) {
-//阻止預設送出表單
+
+    $("form").on("submit", function(event) {
+        // 阻止預設送出表單
         event.preventDefault();
-//把#id封裝成json物件,傳遞到後端
-        const url = "/user/saveUser"
+
+        // 把#id封裝成json物件,傳遞到後端
+        const url = "/user/saveUser";
         const data = {
-        account: $("#account").val(),
-        password: $("#password").val(),
-        name: $("#name").val(),
-        phone: $("#tel").val(),
-        email: $("#email").val()
-         };
+            account: $("#account").val(),
+            password: $("#password").val(),
+            name: $("#name").val(),
+            phone: $("#tel").val(),
+            email: $("#email").val()
+        };
 
         $.ajax({
             url,
@@ -144,17 +154,29 @@
             contentType: "application/json",
             data: JSON.stringify(data),
             success: function(response) {
+                // 根據後端返回的code來判斷
+                if (response.code === 1) {
+                    // 註冊成功的處理
                     alert("註冊成功！即將跳轉至登入頁面");
-                    // 成功後進行頁面跳轉
                     window.location.href = "/login.html"; // 跳轉到登入頁面
-                },
-           error: function(err) {
-                alert("註冊失敗！請稍後再試");
-                console.error("註冊失敗", err); // 提供更多的錯誤訊息
-    }
-        })
-    })
-  });
+                } else if (response.code === 1004) {
+                    // 如果回應是帳號已存在，顯示錯誤訊息
+                    $("#message").text(response.msg);
+                } else {
+                    // 處理其他返回狀態，顯示錯誤信息
+                    $("#message").text(response.msg);
+                }
+            },
+            error: function(xhr) {
+                // 當AJAX請求失敗時的處理
+                $("#message").text("註冊失敗！請稍後再試");
+                console.error("註冊失敗", xhr); // 提供更多的錯誤訊息
+            }
+        });
+    });
+});
 </script>
+
+
 
 </html>

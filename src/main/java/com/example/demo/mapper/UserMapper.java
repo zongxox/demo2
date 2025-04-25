@@ -12,5 +12,7 @@ public interface UserMapper {
 
     User getUserByAccountPassword(String account,String password);//登入
 
-    int updateUser(User user);
+    int updateUser(User user);//修改
+
+    User getUserByAccount(String account);//判斷帳號是否重複
 }
