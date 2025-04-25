@@ -44,6 +44,7 @@ public class UserController {
     public JsonResult getUserByAccountPassword(@RequestBody User user){
         //接收前端傳過來的帳號密碼,查詢是否有該帳號
         User userByAccountPassword = userMapper.getUserByAccountPassword(user.getAccount(),user.getPassword());
+        System.out.println(userByAccountPassword);
         if(userByAccountPassword!=null){//判斷如果數據庫有該帳號及密碼
             return JsonResult.ok();//成功
         }else {//沒有則失敗

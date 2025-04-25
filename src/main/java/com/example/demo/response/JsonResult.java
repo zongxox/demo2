@@ -5,10 +5,11 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor//全參構造器註解
+//JsonResult類 統一回應物件
 public class JsonResult {
     private Integer code; //回應狀態碼
     private String msg; //回應狀態信息結果
-    private Object data;//回應數據
+    private Object data;//回應數據,不確定回傳的是什麼數據,所以就用Object,任何數據都可以回傳
 
     //只包含狀態碼和回應信息的構造器
     public JsonResult(Integer code, String msg) {
