@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor//全參構造器註解
-//JsonResult類 統一回應物件
+//JsonResult類 統一返回值結果
 public class JsonResult {
     private Integer code; //回應狀態碼
     private String msg; //回應狀態信息結果
