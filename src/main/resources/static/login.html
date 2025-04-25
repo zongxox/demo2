@@ -134,12 +134,13 @@
             contentType: "application/json",
             data: JSON.stringify(data),
             success: function(response) {
-            if(response=="登入成功"){
+            if(response.message =="登入成功"){
              alert("登入成功！即將跳轉至會員中心");
+                     localStorage.setItem("user", JSON.stringify(response.user)); // 存入會員資料
                     // 成功後進行頁面跳轉
                     window.location.href = "/articleManagement.html"; // 跳轉到會員中心
             }else{
-                $("#message").text("登入失敗"); // 顯示登入失敗
+                $("#message").text("帳號或密碼錯誤,請重新輸入!!"); // 顯示登入失敗
             }
             },
            error: function(xhr) {

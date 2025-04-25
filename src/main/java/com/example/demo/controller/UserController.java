@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -25,15 +27,20 @@ public class UserController {
     //http://localhost:8080/login.html
     //登入
     @PostMapping("/getUserByAccountPassword")
-    public String getUserByAccountPassword(@RequestBody User user){
+    public Map<String, Object> getUserByAccountPassword(@RequestBody User user){
         User userByAccountPassword = userMapper.getUserByAccountPassword(user.getAccount(),user.getPassword());
+        Map<String,Object> response  = new HashMap<>();
         if(userByAccountPassword!=null){
-            return "登入成功";
-
+            response.put("message","登入成功");
+            Map<String,Object> userDate = new HashMap<>();
+            userDate.put("name",userByAccountPassword.getName());
+            userDate.put("email",userByAccountPassword.getEmail());
+            userDate.put("phone",userByAccountPassword.getPhone());
+            response.put("user",userDate);
         }else {
-            return "登入失敗";
+            response.put("message","登入失敗");
         }
-
+        return response;
     }
 
 }

@@ -14,7 +14,7 @@
 
 <!--登入-->
     <select id="getUserByAccountPassword" resultType="com.example.demo.entity.User">
-        SELECT account,password FROM user WHERE account = #{account} AND password = #{password}
+        SELECT id,account,password,name,phone,email,created_time FROM user WHERE account = #{account} AND password = #{password}
     </select>
 <!--新增用戶-->
     <insert id="saveUser">
