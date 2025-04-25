@@ -26,14 +26,4 @@ public class GlobalExceptionHandler {
         return new JsonResult(StatusCode.OPERATION_FAILED, e.getMessage());
     }
 
-//    @ExceptionHandler(RuntimeException.class)
-//    public JsonResult doHandlerRuntimeException(RuntimeException e){
-//        return new JsonResult(StatusCode.OPERATION_FAILED,e.getMessage());
-//    }
-
-  /*  //Throwable 是所有異常的父類！ 一般來講 開發階段使用的目的是為了防止服務氣終止
-    @ExceptionHandler(Throwable.class)
-    public JsonResult doHandlerThrowable(Throwable t){
-        return new JsonResult(StatusCode.OPERATION_FAILED,"代碼執行過程中出現錯誤Throwable,信息為：" +t.getMessage());
-    }*/
 }
