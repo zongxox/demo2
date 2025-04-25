@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -21,14 +19,13 @@ public class UserController {
     //註冊
     @PostMapping("/saveUser")
     public JsonResult saveUser(@RequestBody User user){
-        user.setCreated_time(new Date());//創建時間
-        user.setUpdated_time(new Date());//修改時間
-
         //查詢帳號是否重複
         User existingUser = userMapper.getUserByAccount(user.getAccount());
         if (existingUser != null) {//如果重複
             return new JsonResult(StatusCode.ACCOUNT_ALREADY_EXISTS);
         }
+        user.setCreated_time(new Date());//創建時間
+        user.setUpdated_time(new Date());//修改時間
         //不重複就,新增
         int rows = userMapper.saveUser(user);
         if(rows>0){
