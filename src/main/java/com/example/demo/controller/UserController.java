@@ -28,11 +28,13 @@ public class UserController {
     //登入
     @PostMapping("/getUserByAccountPassword")
     public Map<String, Object> getUserByAccountPassword(@RequestBody User user){
+        //接收前端傳過來的帳號密碼,查詢是否有該帳號
         User userByAccountPassword = userMapper.getUserByAccountPassword(user.getAccount(),user.getPassword());
         Map<String,Object> response  = new HashMap<>();
         if(userByAccountPassword!=null){
             response.put("message","登入成功");
             Map<String,Object> userDate = new HashMap<>();
+            userDate.put("id",userByAccountPassword.getId());
             userDate.put("name",userByAccountPassword.getName());
             userDate.put("email",userByAccountPassword.getEmail());
             userDate.put("phone",userByAccountPassword.getPhone());
@@ -42,5 +44,13 @@ public class UserController {
         }
         return response;
     }
+
+    @PostMapping("/updateUser")
+    public String updateUser(@RequestBody User user){
+        user.setUpdated_time(new Date());
+        int rows = userMapper.updateUser(user);
+        return rows>0?"修改成功":"修改失敗";
+    }
+
 
 }

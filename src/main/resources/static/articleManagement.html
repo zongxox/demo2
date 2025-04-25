@@ -226,19 +226,16 @@
     }
 
     $(function () {
-  const user = JSON.parse(localStorage.getItem("user"));//儲存後端傳過來的user資料
-  if (user) {
-    $("#user-name").text(user.name);//顯示個人資料姓名
-    $("#user-email").text(user.email);//顯示個人資料電子信箱
-    $("#user-phone").text(user.phone);//顯示個人資料電話
-    $("#name").val(user.name);//輸入框顯示登入者的姓名
-    $("#email").val(user.email);//輸入框顯示登入者email
-    $("#phone").val(user.phone);//輸入框顯示登入者電話
-  } else {
-    alert("尚未登入，請先登入！");
-    window.location.href = "/login.html";
-  }
-});
+        const user = JSON.parse(localStorage.getItem("user"));//儲存後端傳過來的user資料
+    if (user) {
+        $("#user-name").text(user.name);//顯示個人資料姓名
+        $("#user-email").text(user.email);//顯示個人資料電子信箱
+        $("#user-phone").text(user.phone);//顯示個人資料電話
+    } else {
+        alert("尚未登入，請先登入！");
+        window.location.href = "/login.html";
+        }
+    });
 
 </script>
 

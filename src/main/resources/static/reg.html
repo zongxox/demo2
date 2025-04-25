@@ -122,14 +122,14 @@
 </body>
 
 <script>
-<!--引入header-->
+//引入header
     $(function () {
     $("#header-container").load("header.html");
-        const url = "/user/saveUser"
         $("form").on("submit", function(event) {
-<!--阻止預設送出表單-->
+//阻止預設送出表單
         event.preventDefault();
-<!--把id封裝成json物件,傳遞到後端-->
+//把#id封裝成json物件,傳遞到後端
+        const url = "/user/saveUser"
         const data = {
         account: $("#account").val(),
         password: $("#password").val(),
@@ -144,11 +144,14 @@
             contentType: "application/json",
             data: JSON.stringify(data),
             success: function(response) {
-            alert("註冊成功！即將跳轉至登入頁面");
+                    alert("註冊成功！即將跳轉至登入頁面");
                     // 成功後進行頁面跳轉
                     window.location.href = "/login.html"; // 跳轉到登入頁面
                 },
-            error: err => console.log(err)
+           error: function(err) {
+                alert("註冊失敗！請稍後再試");
+                console.error("註冊失敗", err); // 提供更多的錯誤訊息
+    }
         })
     })
   });
