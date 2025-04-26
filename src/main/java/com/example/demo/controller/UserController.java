@@ -26,6 +26,7 @@ public class UserController {
         }
         user.setCreated_time(new Date());//創建時間
         user.setUpdated_time(new Date());//修改時間
+        user.set_admin(false);
         //不重複就,新增
         int rows = userMapper.saveUser(user);
         if(rows>0){
@@ -40,9 +41,9 @@ public class UserController {
     @PostMapping("/getUserByAccountPassword")
     public JsonResult getUserByAccountPassword(@RequestBody User user){
         //接收前端傳過來的帳號密碼,查詢是否有該帳號
-        User userByAccountPassword = userMapper.getUserByAccountPassword(user.getAccount(),user.getPassword());
+        User userByAccountPassword = userMapper.getUserByAccountPassword(user.getAccount(),user.getPassword(),user.is_admin());
         if(userByAccountPassword!=null){//判斷如果數據庫有該帳號及密碼
-            return JsonResult.ok();//成功
+            return JsonResult.ok(userByAccountPassword);//成功
         }else {//沒有則失敗
             return new JsonResult(StatusCode.ACCOUNT_PASSWORD_ERROR);//帳號密碼錯誤
         }

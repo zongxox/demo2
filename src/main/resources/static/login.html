@@ -12,7 +12,6 @@
     }
 
     .main {
-      background-image: url('imgs/loginbg.gif');
       background-size: cover;
       background-position: center;
       height: 500px;
@@ -118,7 +117,9 @@
 $(function () {
     $("#header-container").load("header.html");
 
-    const url = "/user/getUserByAccountPassword";
+    //用戶跟管理員api路徑
+    const urlUser = "/user/getUserByAccountPassword";
+    const urlAdmin="/admin/getAdminByAccountPassword"
     $("form").on("submit", function(event) {
         // 阻止預設送出表單
         event.preventDefault();
@@ -129,8 +130,11 @@ $(function () {
             password: $("#password").val()
         };
 
+        // 動態選擇 API
+        const url = data.account === "admin" ? urlAdmin : urlUser;
+
         $.ajax({
-            url,
+            url: url,
             type: 'POST',
             contentType: "application/json",
             data: JSON.stringify(data),
@@ -138,8 +142,10 @@ $(function () {
                 // 檢查 response.code 是否是 1 (登入成功)
                 if(response.code === 1){
                     alert("登入成功！即將跳轉至會員中心");
-                    // 成功後進行頁面跳轉
-                    window.location.href = "/user.html"; // 跳轉到會員中心
+                    //登入成功後判斷is_admin 是1就admin.html 還是0就/user.html 封裝到targetUrl物件
+                    const targetUrl = response.data.id_admin === 1 ? "/admin.html" : "/user.html";
+                    // 成功後進行頁面跳轉 再用物件去跳轉畫面
+                    window.location.href = targetUrl; // 跳轉到會員中心或管理中心
                 } else {
                     // 顯示登入失敗訊息
                     $("#message").text(response.msg);

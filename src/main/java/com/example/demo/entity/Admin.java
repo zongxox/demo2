@@ -1,20 +1,18 @@
 package com.example.demo.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
 @Data
-public class User {
+public class Admin {
     private Integer id;
     private String account;
     private String password;
     private String name;
-    private String phone;
     private String email;
+    private String phone;
     private boolean is_admin;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")  // 使用 @JsonFormat 來格式化返回的日期
     private Date created_time;
