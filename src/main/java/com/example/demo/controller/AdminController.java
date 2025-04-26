@@ -27,7 +27,7 @@ public class AdminController {
     //登入
     @PostMapping("/login")
     public JsonResult login(@RequestBody Map<String, String> loginData) {
-        String account = loginData.get("account");
+        String account = loginData.get("account");//前端傳遞過來的值
         String password = loginData.get("password");
 
         // 先查詢管理員

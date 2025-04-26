@@ -26,26 +26,13 @@ public class UserController {
         }
         user.setCreated_time(new Date());//創建時間
         user.setUpdated_time(new Date());//修改時間
-        user.setIs_admin(false);
+        user.setIs_admin(false);//是否是管理員 0=false
         //不重複就,新增
         int rows = userMapper.saveUser(user);
         if(rows>0){
             return JsonResult.ok();
         }else {
             return new JsonResult(StatusCode.OPERATION_FAILED);//操作失敗
-        }
-    }
-
-    //http://localhost:8080/login.html
-    //登入
-    @PostMapping("/getUserByAccountPassword")
-    public JsonResult getUserByAccountPassword(@RequestBody User user){
-        //接收前端傳過來的帳號密碼,查詢是否有該帳號
-        User userByAccountPassword = userMapper.getUserByAccountPassword(user.getAccount(),user.getPassword());
-        if(userByAccountPassword!=null){//判斷如果數據庫有該帳號及密碼
-            return JsonResult.ok(userByAccountPassword);//成功
-        }else {//沒有則失敗
-            return new JsonResult(StatusCode.ACCOUNT_PASSWORD_ERROR);//帳號密碼錯誤
         }
     }
 
