@@ -8,6 +8,7 @@
     <select id="getUserByAccountPassword" resultType="com.example.demo.entity.User">
         SELECT id,account,password,name,phone,email,is_admin,created_time FROM user WHERE account = #{account} AND password = #{password}
     </select>
+
 <!--查詢帳號-->
     <select id="getUserByAccount" resultType="com.example.demo.entity.User">
         SELECT account FROM user WHERE account = #{account}

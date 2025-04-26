@@ -32,7 +32,7 @@ public class AdminService {
         if (admin != null) {//查詢出來是空值就是false 是true就執行
             AdminLoginVO vo = new AdminLoginVO();//創建vo對象用於回傳給前端的封裝資料
             //BeanUtils.copyProperties(source, target)：自動把名字相同的屬性值名稱複製過去
-            //把查詢到的admin資料庫轉存到vo,對應到vo裡面的屬興去封裝,在傳遞到前端,裡面已經設定好要傳遞什麼屬性給年端
+            //把查詢到的admin資料庫轉存到vo,對應到vo裡面的屬興去封裝,在傳遞到前端,裡面已經設定好要傳遞什麼屬性給前端
             BeanUtils.copyProperties(admin, vo);
             return JsonResult.ok(vo);
         }

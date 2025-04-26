@@ -34,9 +34,9 @@ public class UserService {
         int rows = userMapper.saveUser(user);
 
         if (rows > 0) {
-            return JsonResult.ok();  // 保存成功
+            return JsonResult.ok();  // 新增成功
         } else {
-            return new JsonResult(StatusCode.OPERATION_FAILED);  // 保存失敗
+            return new JsonResult(StatusCode.OPERATION_FAILED);  // 操作失敗
         }
     }
 
