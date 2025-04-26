@@ -3,8 +3,8 @@ package com.example.demo.mapper;
 import com.example.demo.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
-import java.util.List;
 
+//連接資料庫，寫 SQL 查資料
 @Mapper
 public interface UserMapper {
 

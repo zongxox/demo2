@@ -7,8 +7,8 @@ import com.example.demo.response.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 
+//Service 做判斷、做查詢、做邏輯
 @Service
 public class UserService {
     @Autowired
@@ -30,7 +30,7 @@ public class UserService {
             return new JsonResult(StatusCode.OPERATION_FAILED);  // 保存失敗，返回操作失敗的錯誤信息
         }
     }
-    
+
     //查詢Email
     public User selectByEmail(String email) {
         return userMapper.selectUserByEmail(email);

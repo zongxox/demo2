@@ -7,7 +7,7 @@ import com.example.demo.response.StatusCode;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+//Controller 接收資料前端 ➔ 丟給Service ➔ 傳回前端資料
 @RestController
 @RequestMapping("/user")
 public class UserController {
