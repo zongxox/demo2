@@ -9,5 +9,6 @@ public class UserLoginVO {
     private String account;
     private String name;
     private String email;
+    private String phone;
     private Boolean is_admin;
 }
