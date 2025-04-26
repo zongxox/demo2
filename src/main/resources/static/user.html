@@ -224,17 +224,17 @@
         document.getElementById('edit-profile').style.display = 'none';//隱藏編輯資料
         document.getElementById('profile').style.display = 'block';//顯示會員資料
     }
-    $(function () {
-        const user = JSON.parse(localStorage.getItem("user"));//儲存後端傳過來的user資料
-    if (user) {
-        $("#user-name").text(user.name);//顯示個人資料姓名
-        $("#user-email").text(user.email);//顯示個人資料電子信箱
-        $("#user-phone").text(user.phone);//顯示個人資料電話
-    } else {
-        alert("尚未登入，請先登入！");
-        window.location.href = "/login.html";
-        }
-    });
+<!--    $(function () {-->
+<!--        const user = JSON.parse(localStorage.getItem("user"));//儲存後端傳過來的user資料-->
+<!--    if (user) {-->
+<!--        $("#user-name").text(user.name);//顯示個人資料姓名-->
+<!--        $("#user-email").text(user.email);//顯示個人資料電子信箱-->
+<!--        $("#user-phone").text(user.phone);//顯示個人資料電話-->
+<!--    } else {-->
+<!--        alert("尚未登入，請先登入！");-->
+<!--        window.location.href = "/login.html";-->
+<!--        }-->
+<!--    });-->
 
 
 </script>

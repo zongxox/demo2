@@ -117,8 +117,8 @@
 $(function () {
     $("#header-container").load("header.html");
 
-    //用戶api路徑
-    const url= "/user/getUserByAccountPassword";
+    //api路徑
+    const url = "/login";
 
     $("form").on("submit", function(event) {
         // 阻止預設送出表單
@@ -139,8 +139,13 @@ $(function () {
                 // 檢查 response.code 是否是 1 (登入成功)
                 if(response.code === 1){
                     alert("登入成功！即將跳轉至會員中心");
+                    // 判斷是否為管理員，跳轉到不同頁面
+                    // isAdmin === 1 => 是管理員
+                    // isAdmin === 0 => 是用戶
+                    const isAdmin = response.data.is_admin;
+                    const targetUrl = isAdmin ? "/admin.html" : "/user.html";
                     // 成功後進行頁面跳轉 再用物件去跳轉畫面
-                    window.location.href = "/user.html"; // 跳轉到會員中心或管理中心
+                    window.location.href = targetUrl; // 跳轉到會員中心或管理中心
                 } else {
                     // 顯示登入失敗訊息
                     $("#message").text(response.msg);
