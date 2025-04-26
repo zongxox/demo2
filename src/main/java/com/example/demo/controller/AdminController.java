@@ -27,8 +27,8 @@ public class AdminController {
     @PostMapping("/getAdminByAccountPassword")
     public JsonResult getAdminByAccountPassword(@RequestBody Admin admin){
         //接收前端傳過來的帳號密碼,查詢是否有該帳號
-        Admin adminByAccountPassword = adminMapper.getAdminByAccountPassword(admin.getAccount(), admin.getPassword(), admin.is_admin());
-        System.out.println(adminByAccountPassword);
+        Admin adminByAccountPassword = adminMapper.getAdminByAccountPassword(admin.getAccount(), admin.getPassword());
+        System.out.println(adminByAccountPassword.getIs_admin());
         if(adminByAccountPassword!=null){//判斷如果數據庫有該帳號及密碼
             return JsonResult.ok(adminByAccountPassword);//成功
         }else {//沒有則失敗

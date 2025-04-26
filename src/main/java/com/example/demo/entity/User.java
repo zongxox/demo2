@@ -15,7 +15,7 @@ public class User {
     private String name;
     private String phone;
     private String email;
-    private boolean is_admin;
+    private Boolean is_admin;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")  // 使用 @JsonFormat 來格式化返回的日期
     private Date created_time;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")  // 使用 @JsonFormat 來格式化返回的日期

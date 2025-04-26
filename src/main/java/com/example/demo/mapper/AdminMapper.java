@@ -7,5 +7,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface AdminMapper {
 
-    Admin getAdminByAccountPassword(String account, String password, boolean is_admin);//登入
+    Admin getAdminByAccountPassword(String account, String password);//登入
 }

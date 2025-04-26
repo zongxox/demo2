@@ -10,7 +10,7 @@ public interface UserMapper {
 
     int saveUser(User user);//新增用戶
 
-    User getUserByAccountPassword(String account,String password,boolean is_admin);//登入
+    User getUserByAccountPassword(String account,String password);//登入
 
     int updateUser(User user);//修改
 
