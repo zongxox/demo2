@@ -19,9 +19,9 @@
         VALUES(null,#{account},#{password},#{name},#{phone},#{email},#{is_admin},now(),now())
     </insert>
 
-<!--查詢所有email-->
+<!--查詢email-->
     <select id="selectUserByEmail" resultType="com.example.demo.entity.User">
-        SELECT id,account,password,name,phone,email,is_admin,created_time FROM user WHERE email = #{email}
+        SELECT id,account,password,name,phone,email,is_admin,created_time,updated_time FROM user WHERE email = #{email}
     </select>
 
 

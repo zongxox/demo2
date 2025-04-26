@@ -1,9 +1,11 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.UserRegisterDTO;
 import com.example.demo.entity.User;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.response.JsonResult;
 import com.example.demo.response.StatusCode;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,26 +17,37 @@ public class UserService {
     private UserMapper userMapper;
 
     //註冊
-    public JsonResult saveByUser(User user){
-        //查詢帳號是否重複
-        User existingUser = userMapper.getUserByAccount(user.getAccount());
-        if (existingUser != null) {//如果帳號重複
+    public JsonResult saveByUser(UserRegisterDTO userRegisterDTO){
+        // 查詢帳號是否重複
+        User existingUser = userMapper.getUserByAccount(userRegisterDTO.getAccount());
+        if (existingUser != null) { // 如果帳號重複
             return new JsonResult(StatusCode.ACCOUNT_ALREADY_EXISTS);
         }
-        user.setIs_admin(false);//是否是管理員 0=false
+
+        // DTO 轉存到 Entity
+        //前端傳過來的DTO屬性資料,轉存到Entity(user)屬性,然後再存到數據庫,所以不需要用到VO去回應
+        //註冊就是收資料 ➔ 存資料，不是拿資料給前端，所以只用 DTO 和 Entity，不用 VO。
+        User user = new User();
+        BeanUtils.copyProperties(userRegisterDTO, user);
+        user.setIs_admin(false); // 註冊的使用者預設不是管理員
+
         int rows = userMapper.saveUser(user);
-        //執行新增
+
         if (rows > 0) {
-            return JsonResult.ok();  // 保存成功，返回成功的 JsonResult
+            return JsonResult.ok();  // 保存成功
         } else {
-            return new JsonResult(StatusCode.OPERATION_FAILED);  // 保存失敗，返回操作失敗的錯誤信息
+            return new JsonResult(StatusCode.OPERATION_FAILED);  // 保存失敗
         }
     }
 
-    //查詢Email
-    public User selectByEmail(String email) {
-        return userMapper.selectUserByEmail(email);
-    }
+//    //查詢Email
+//    public JsonResult selectByEmail(String email) {
+//        User userEmail = userMapper.selectUserByEmail(email);
+//        if(userEmail != null){
+//            return JsonResult.ok(userEmail);
+//        }
+//        return new JsonResult(StatusCode.OPERATION_FAILED);
+//    }
 
 
 }

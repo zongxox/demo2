@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.LoginDTO;
 import com.example.demo.entity.Admin;
 import com.example.demo.entity.User;
 import com.example.demo.mapper.AdminMapper;
@@ -25,11 +26,9 @@ public class AdminController {
     //http://localhost:8080/login.html
     //登入
     @PostMapping("/login")
-    public JsonResult login(@RequestBody Map<String, String> loginData) {
-        String account = loginData.get("account");//接收前端的值
-        String password = loginData.get("password");
-
-        //傳遞到adminService的方法做處理,adminService會回傳一個JsonResult的結果,這邊再JsonResult返回給前端
-        return adminService.login(account, password);
+    public JsonResult login(@RequestBody LoginDTO loginDTO) {
+        //把接收到的值帳號密碼封裝到loginDTO
+        //在傳遞到adminService的方法做處理,adminService會回傳一個JsonResult的結果,這邊再JsonResult返回給前端
+        return adminService.login(loginDTO.getAccount(),loginDTO.getPassword());
     }
 }
