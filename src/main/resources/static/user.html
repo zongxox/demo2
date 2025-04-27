@@ -142,7 +142,7 @@
         <a href="#profile">會員資料</a>
         <a href="#orders">我的訂單</a>
         <a href="index.html">首頁</a>
-        <a href="index.html">登出</a>
+        <a id="out">登出</a>
     </div>
 
     <!-- 主要內容 -->
@@ -236,7 +236,23 @@
 <!--        window.location.href = "/login.html";-->
 <!--        }-->
 <!--    });-->
-
+$("#out").on("click", function(event) {
+    event.preventDefault(); // 阻止表單預設提交
+    const url = "/user/logout"; // 登出API路徑
+    $.ajax({
+        url: url,
+        type: 'GET', // 用GET或POST，看你後端設計
+        success: function(response) {
+            console.log("執行成功：", response);
+            // 登出成功可以做跳轉
+            alert("登出成功！");
+            window.location.href = "login.html"; // 跳回登入頁
+        },
+        error: function(xhr) {
+            console.error("執行失敗", xhr);
+        }
+    });
+});
 
 </script>
 
