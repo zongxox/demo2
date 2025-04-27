@@ -28,7 +28,7 @@ public class UserController {
     //登出
     @GetMapping("/logout")
     public JsonResult logout(HttpSession session){
-        session.invalidate();//清除sission
+        session.removeAttribute("sessionUser");//清除sessionUser
         return JsonResult.ok();
     }
 

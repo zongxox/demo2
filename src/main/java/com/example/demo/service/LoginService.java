@@ -32,7 +32,7 @@ public class LoginService {
             //BeanUtils.copyProperties(source, target)：自動把名字相同的屬性值名稱複製過去
             //把查詢到的admin資料庫轉存到vo,對應到vo裡面的屬興去封裝,在傳遞到前端,裡面已經設定好要傳遞什麼屬性給前端
             BeanUtils.copyProperties(admin, vo);
-            //保存session
+            //登入時保存session
             session.setAttribute("sessionAdmin",vo);
             return JsonResult.ok(vo);
         }
@@ -42,7 +42,7 @@ public class LoginService {
         if (user != null) {//查詢出來是空值就是false 是true就執行
             UserLoginVO vo = new UserLoginVO();
             BeanUtils.copyProperties(user, vo);
-            //保存session
+            //登入時保存session
             session.setAttribute("sessionUser",vo);
             return JsonResult.ok(vo);
         }
