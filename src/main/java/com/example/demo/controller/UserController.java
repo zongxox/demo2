@@ -6,6 +6,7 @@ import com.example.demo.mapper.UserMapper;
 import com.example.demo.response.JsonResult;
 import com.example.demo.response.StatusCode;
 import com.example.demo.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 //Controller 接收資料前端 ➔ 丟給Service ➔ 傳回前端資料
@@ -23,5 +24,12 @@ public class UserController {
         return userService.saveByUser(userRegisterDTO);
     }
 
+
+    //登出
+    @GetMapping("/logout")
+    public JsonResult logout(HttpSession session){
+        session.invalidate();//清除sission
+        return JsonResult.ok();
+    }
 
 }
