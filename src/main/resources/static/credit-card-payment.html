@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>Clothique付款詳細資料</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .payment-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .payment-header {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .payment-header h2 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: normal;
+            margin-right: 10px;
+        }
+
+        .payment-header i {
+            color: #333;
+        }
+
+        .required-info {
+            text-align: right;
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group label .required {
+            color: red;
+            margin-left: 2px;
+        }
+
+        .card-type-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .card-type-option {
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+        }
+
+        .card-type-option input[type="radio"] {
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        .card-type-option img {
+            height: 20px;
+            vertical-align: middle;
+            margin-left: 5px;
+        }
+
+        .form-group input[type="text"],
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .expiry-date-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .expiry-date-group > div {
+            flex: 1;
+        }
+
+        .cvn-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .cvn-info img {
+            height: 30px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .submit-button-container {
+            text-align: right;
+            margin-top: 30px;
+        }
+
+        .submit-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .submit-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<div class="payment-container">
+    <div class="payment-header">
+        <h2>付款詳細資料</h2>
+    </div>
+
+    <div class="required-info">
+        * 必填欄位
+    </div>
+
+    <form id="paymentForm">
+        <div class="form-group">
+            <label>信用卡類型 <span class="required">*</span></label>
+            <div class="card-type-options">
+                <div class="card-type-option">
+                    <input type="radio" id="visa" name="card_type" value="visa">
+                    <label for="visa">
+                        <img src="images/icon_visa.png" alt="Visa"> Visa
+                    </label>
+                </div>
+                <div class="card-type-option">
+                    <input type="radio" id="mastercard" name="card_type" value="mastercard">
+                    <label for="mastercard">
+                        <img src="images/icon_MasterCard.png" alt="Mastercard"> Mastercard
+                    </label>
+                </div>
+                <div class="card-type-option">
+                    <input type="radio" id="jcb" name="card_type" value="jcb">
+                    <label for="jcb">
+                        <img src="images/icon_jcb.png" alt="JCB"> JCB
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="card_number">信用卡號碼 <span class="required">*</span></label>
+            <input type="text" id="card_number" name="card_number" placeholder="XXXX-XXXX-XXXX-XXXX" required>
+        </div>
+
+        <div class="form-group">
+            <div class="expiry-date-group">
+                <div>
+                    <label for="expiry_month">月份 <span class="required">*</span></label>
+                    <select id="expiry_month" name="expiry_month" required>
+                        <option value="">月</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="expiry_year">年份 <span class="required">*</span></label>
+                    <select id="expiry_year" name="expiry_year" required>
+                        <option value="">年</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="cvn">CVN <span class="required">*</span></label>
+            <input type="text" id="cvn" name="cvn" placeholder="XXX" required>
+            <div class="cvn-info">
+                此代碼為印於信用卡正面或背面的三位或四位數字。
+                <img src="images/icon_cvn.jpg" alt="CVN example">
+            </div>
+        </div>
+
+        <div class="submit-button-container">
+            <button type="submit" class="submit-button">付款</button>
+        </div>
+    </form>
+</div>
+
+
+<script>
+        $(document).ready(function() {
+            // 年
+            var $expiryMonth = $('#expiry_month');
+            for (var i = 1; i <= 12; i++) {
+                $expiryMonth.append($('<option>', {
+                    value: i,
+                    text: i
+                }));
+            }
+
+            // 月 (當前年份 + 10年)
+            var $expiryYear = $('#expiry_year');
+            var currentYear = new Date().getFullYear();
+            for (var i = 0; i <= 10; i++) {
+                var year = currentYear + i;
+                $expiryYear.append($('<option>', {
+                    value: year,
+                    text: year
+                }));
+            }
+
+            //表單驗證、提交
+            $('#paymentForm').on('submit', function(event) {
+                event.preventDefault();//阻止表單預設提交
+                // 這裡撰寫AJAX提交
+            });
+
+            // 信用卡顯示格式化以及限制
+            $('#card_number').on('input', function() {
+                var value = $(this).val().replace(/\D/g, ''); // 移除所有非數字
+                if (value.length > 16) {//限制長度16位數字
+                    value = value.substring(0, 16);
+                }
+                value = value.replace(/(.{4})(?=\d)/g, '$1-'); // 每4數字增加符號-
+                $(this).val(value);
+            });
+
+            // cvn顯示格式化以及限制
+            $('#cvn').on('input', function() {
+                var value = $(this).val().replace(/\D/g, ''); // 移除所有非數字
+                if (value.length > 3) {//限制長度3位數字
+                    value = value.substring(0, 3);
+                }
+                $(this).val(value);
+            });
+        });
+    </script>
+</body>
+</html>
