@@ -25,10 +25,7 @@
         SELECT id,account,password,name,phone,email,is_admin,created_time,updated_time FROM user WHERE email = #{email}
     </select>
 
-
-
-
-
+<!--修改會員中心資料-->
     <update id="updateUser">
         UPDATE user
         <set>

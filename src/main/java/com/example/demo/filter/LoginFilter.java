@@ -33,6 +33,7 @@ public class LoginFilter implements Filter {
         UserLoginVO sessionUser =(UserLoginVO) session.getAttribute("sessionUser");
         AdminLoginVO sessionAdmin =(AdminLoginVO) session.getAttribute("sessionAdmin");
         //判斷當前sessionUser,跟sessionAdmin,拿到的對象裡面有沒有登入的數據
+        //如果裡面是空值,代表沒有去執行過登入api,沒有查詢過帳號密碼,並封裝到vo裡面,就會跳回登入畫面
         if(sessionUser == null&&sessionAdmin == null){
             //等於空代表未登入,所以就返回登入畫面
             response.sendRedirect("/login.html");

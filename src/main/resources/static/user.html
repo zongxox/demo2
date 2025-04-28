@@ -142,7 +142,7 @@
         <a href="#profile">會員資料</a>
         <a href="#orders">我的訂單</a>
         <a href="index.html">首頁</a>
-        <a id="out">登出</a>
+        <a href="#"id="out">登出</a>
     </div>
 
     <!-- 主要內容 -->
@@ -162,6 +162,7 @@
         <div id="edit-profile" class="content" style="display: none;">
             <h3>編輯資料</h3>
             <form class="edit-profile-form">
+                <input type="hidden" id="id" name="id">
                 <label for="name">姓名</label>
                 <input type="text" id="name" name="name" placeholder="請輸入姓名">
 
@@ -225,35 +226,79 @@
         document.getElementById('edit-profile').style.display = 'none';//隱藏編輯資料
         document.getElementById('profile').style.display = 'block';//顯示會員資料
     }
-<!--    $(function () {-->
-<!--        const user = JSON.parse(localStorage.getItem("user"));//儲存後端傳過來的user資料-->
-<!--    if (user) {-->
-<!--        $("#user-name").text(user.name);//顯示個人資料姓名-->
-<!--        $("#user-email").text(user.email);//顯示個人資料電子信箱-->
-<!--        $("#user-phone").text(user.phone);//顯示個人資料電話-->
-<!--    } else {-->
-<!--        alert("尚未登入，請先登入！");-->
-<!--        window.location.href = "/login.html";-->
-<!--        }-->
-<!--    });-->
-$("#out").on("click", function(event) {
-    event.preventDefault(); // 阻止表單預設提交
-    const url = "/user/logout"; // 登出API路徑
+
+//登入後顯示會員中心裡面的基本資料
+$(function () {
+    const url = "/user/userInformation";
     $.ajax({
-        url: url,
-        type: 'GET', // 用GET或POST，看你後端設計
+        url,
+        type: "GET",
         success: function(response) {
-            console.log("執行成功：", response);
-            // 登出成功可以做跳轉
-            alert("登出成功！");
-            window.location.href = "login.html"; // 跳回登入頁
+            if (response.code === 1) {
+                const user = response.data;
+                // 將使用者資料塞到畫面上
+                $("#id").val(user.id);//隱藏欄位
+                $("#user-name").text(user.name);
+                $("#user-email").text(user.email);
+                $("#user-phone").text(user.phone);
+            } else {
+                alert("尚未登入，請先登入！");
+                window.location.href = "/login.html"; // 跳回登入頁
+            }
         },
         error: function(xhr) {
-            console.error("執行失敗", xhr);
+            alert("系統錯誤，請重新登入！");
+            window.location.href = "/login.html"; // 跳回登入頁
         }
+    });
+
+});
+
+//登出
+$("#out").on("click", function(event) {
+    event.preventDefault(); // 防止a標籤預設跳轉
+        const url = "/user/logout";
+        $.ajax({
+            url,
+            type: "GET",
+            success: function(response) {
+                if(response.code === 1){
+                   window.location.href = "/login.html";
+                }
+            },
+            error: function(xhr) {
+                alert("登出失敗，請稍後再試！");
+            }
     });
 });
 
+//修改會員資料
+$(".edit-profile-form").on("submit", function(event) {
+    event.preventDefault(); // 防止a標籤預設跳轉
+        const url = "/user/updateUser";
+    const data = {
+            id: $("#id").val(),//隱藏欄位,少了這個就無法修改,無法執行SQL
+            name: $("#name").val(),
+            email: $("#email").val(),
+            phone: $("#phone").val(),
+            password: $("#password").val()
+            };
+        $.ajax({
+            url,
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function(response) {
+                if(response.code === 1){
+                   alert("修改成功")
+                   location.reload(); // 重新載入/user/userInformation頁面，讓最新資料顯示,這樣後端會自動重新提交sessionUser回傳到前端
+                }
+            },
+            error: function(xhr) {
+                alert("修改失敗");
+            }
+    });
+});
 </script>
 
 </body>

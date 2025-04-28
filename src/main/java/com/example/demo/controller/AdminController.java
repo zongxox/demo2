@@ -25,7 +25,7 @@ public class AdminController {
     //登出
     @GetMapping("/logout")
     public JsonResult logout(HttpSession session){
-        session.removeAttribute("sessionAdmin");//清除sessionAdmin
+        session.invalidate();////清除session及vo包括sessionId
         return JsonResult.ok();
     }
 

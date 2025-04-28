@@ -5,6 +5,8 @@ import com.example.demo.entity.User;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.response.JsonResult;
 import com.example.demo.response.StatusCode;
+import com.example.demo.vo.UserLoginVO;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,6 +41,24 @@ public class UserService {
             return new JsonResult(StatusCode.OPERATION_FAILED);  // 操作失敗
         }
     }
+
+    //會員中心顯示user相關信息
+    public JsonResult userByInformation(HttpSession session){
+        UserLoginVO sessionUser = (UserLoginVO)session.getAttribute("sessionUser");
+        return JsonResult.ok(sessionUser);
+    }
+
+    //修改會員中心資料
+    public JsonResult updateUser(UserRegisterDTO userRegisterDTO){
+        User user = new User();
+        BeanUtils.copyProperties(userRegisterDTO,user);
+        int rows = userMapper.updateUser(user);
+        if(rows>0){
+            return JsonResult.ok();
+        }
+        return new JsonResult(StatusCode.OPERATION_FAILED);
+    }
+
 
 //    //查詢Email
 //    public JsonResult selectByEmail(String email) {
