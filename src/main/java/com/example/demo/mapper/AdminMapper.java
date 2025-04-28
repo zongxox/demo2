@@ -11,5 +11,5 @@ public interface AdminMapper {
 
     int updateAdmin(Admin admin);//修改管理中心資料
 
-    Admin selectAdminById(int id);
+    Admin selectAdminById(int id);//查詢adminId
 }

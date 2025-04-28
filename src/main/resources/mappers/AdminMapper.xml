@@ -29,10 +29,12 @@
             <if test="email != null and email != '' ">
                 email=#{email},
             </if>
+            updated_time = now()
         </set>
         where id= #{id}
     </update>
 
+<!--查詢adminId-->
     <select id="selectAdminById" resultType="com.example.demo.entity.Admin">
         SELECT id,account,password,name,phone,email,is_admin FROM admin WHERE id = #{id}
     </select>

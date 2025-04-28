@@ -18,5 +18,5 @@ public interface UserMapper {
 
     User selectUserByEmail(String email);//忘記密碼(查詢所有的email)
 
-    User selectUserById(Integer id);
+    User selectUserById(Integer id);//查詢userId
 }

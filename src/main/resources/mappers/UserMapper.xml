@@ -44,10 +44,12 @@
             <if test="email != null and email != '' ">
                 email=#{email},
             </if>
+            updated_time = now()
         </set>
         where id= #{id}
     </update>
 
+<!--查詢userId-->
     <select id="selectUserById" resultType="com.example.demo.entity.User">
         SELECT id,account,password,name,phone,email,is_admin FROM user WHERE id = #{id}
     </select>
