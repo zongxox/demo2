@@ -13,7 +13,7 @@ import java.io.IOException;
 //登入過濾器,登入或未登入時做檢查才能訪問會員或管理員頁面或返回登入畫面
 //標記當前類是過濾器類,在執行控制器之前會先執行
 //要用不同的瀏覽器去測試管理員跟用戶
-@WebFilter(filterName = "loginFilter",urlPatterns = {"/admin.html","/user.html"})
+@WebFilter(filterName = "loginFilter",urlPatterns = {"/admin.html","/user.html","/cart.html","/credit-card-payment.html","/payment_confirm.html"})
 public class LoginFilter implements Filter {
     //每一次有符合 urlPatterns 的請求進來時,執行的地方
     @Override
