@@ -29,24 +29,26 @@
     <update id="updateUser">
         UPDATE user
         <set>
-            <if test="password!=null">
+            <if test="password !=null and password !='' ">
                 password=#{password},
             </if>
 
-            <if test="name!=null">
+            <if test="name != null and name != '' ">
                 name=#{name},
             </if>
 
-            <if test="phone!=null">
+            <if test="phone != null and phone != '' ">
                 phone=#{phone},
             </if>
 
-            <if test="email!=null">
+            <if test="email != null and email != '' ">
                 email=#{email},
             </if>
         </set>
         where id= #{id}
     </update>
 
-
+    <select id="selectUserById" resultType="com.example.demo.entity.User">
+        SELECT id,account,password,name,phone,email,is_admin FROM user WHERE id = #{id}
+    </select>
 </mapper>

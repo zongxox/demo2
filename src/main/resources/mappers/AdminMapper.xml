@@ -7,7 +7,33 @@
 
 <!--登入-->
     <select id="getAdminByAccountPassword" resultType="com.example.demo.entity.Admin">
-        SELECT id,account,password,name,phone,email,is_admin,created_time,updated_time FROM admin WHERE account = #{account} AND password = #{password}
+        SELECT id,account,password,name,phone,email,is_admin FROM admin WHERE account = #{account} AND password = #{password}
     </select>
 
+<!--修改管理中心資料-->
+    <update id="updateAdmin">
+        UPDATE admin
+        <set>
+            <if test="password !=null and password !='' ">
+                password=#{password},
+            </if>
+
+            <if test="name != null and name != '' ">
+                name=#{name},
+            </if>
+
+            <if test="phone != null and phone != '' ">
+                phone=#{phone},
+            </if>
+
+            <if test="email != null and email != '' ">
+                email=#{email},
+            </if>
+        </set>
+        where id= #{id}
+    </update>
+
+    <select id="selectAdminById" resultType="com.example.demo.entity.Admin">
+        SELECT id,account,password,name,phone,email,is_admin FROM admin WHERE id = #{id}
+    </select>
 </mapper>

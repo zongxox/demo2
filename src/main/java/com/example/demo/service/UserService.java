@@ -42,19 +42,23 @@ public class UserService {
         }
     }
 
-    //會員中心顯示user相關信息
+    //顯示會員中心個人資料
     public JsonResult userByInformation(HttpSession session){
         UserLoginVO sessionUser = (UserLoginVO)session.getAttribute("sessionUser");
         return JsonResult.ok(sessionUser);
     }
 
     //修改會員中心資料
-    public JsonResult updateUser(UserRegisterDTO userRegisterDTO){
+    public JsonResult updateUser(UserRegisterDTO userRegisterDTO,HttpSession session){
         User user = new User();
         BeanUtils.copyProperties(userRegisterDTO,user);
         int rows = userMapper.updateUser(user);
         if(rows>0){
-            return JsonResult.ok();
+            User userById = userMapper.selectUserById(user.getId());
+            UserLoginVO vo = new UserLoginVO();
+            BeanUtils.copyProperties(userById,vo);
+            session.setAttribute("sessionUser",vo);
+            return JsonResult.ok(vo);
         }
         return new JsonResult(StatusCode.OPERATION_FAILED);
     }

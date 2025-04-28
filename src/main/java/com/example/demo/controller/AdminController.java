@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.AdminRegisterDTO;
 import com.example.demo.dto.LoginDTO;
 import com.example.demo.entity.Admin;
 import com.example.demo.entity.User;
@@ -27,6 +28,18 @@ public class AdminController {
     public JsonResult logout(HttpSession session){
         session.invalidate();////清除session及vo包括sessionId
         return JsonResult.ok();
+    }
+    //顯示管理中心個人資料
+    //http://localhost:8080/admin.html 直接訪問會員中心會被過濾器攔截
+    @GetMapping("/adminInformation")
+    public JsonResult adminByInformation(HttpSession session){
+        return adminService.adminByInformation(session);
+    }
+
+    //修改管理中心資料
+    @PostMapping("/updateAdmin")
+    public JsonResult updateAdmin(@RequestBody AdminRegisterDTO adminRegisterDTO,HttpSession session){
+        return adminService.updateAdmin(adminRegisterDTO,session);
     }
 
 }

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>管理員中心</title>
     <style>
         body {
@@ -140,7 +141,7 @@
         <a href="#user-management">用戶管理</a>
         <a href="#order-management">訂單管理</a>
         <a href="index.html">返回首頁</a>
-        <a href="index.html">登出</a>
+        <a href="#" id="out">登出</a>
     </div>
 
     <!-- 主要內容 -->
@@ -149,9 +150,9 @@
         <div id="profile" class="content">
             <div class="profile-info">
                 <h3>管理員資料</h3>
-                <p><strong>姓名：</strong> tom</p>
-                <p><strong>電子郵件：</strong> tom@example.com</p>
-                <p><strong>註冊日期：</strong> 2021-05-01</p>
+                <p><strong>姓名：</strong><span id="admin-name"></span></p>
+                <p><strong>電子信箱：</strong><span id="admin-email"></span></p>
+                <p><strong>電話：</strong><span id="admin-phone"></span></p>
                 <button class="btn" onclick="editProfile()">編輯資料</button>
             </div>
         </div>
@@ -159,11 +160,12 @@
         <!-- 編輯資料區 -->
         <div id="edit-profile" class="content edit-profile" style="display:none;">
             <h3>編輯資料</h3>
-            <form action="#" method="post">
-                <p><strong>姓名：</strong><input type="text" name="name" value="tom"></p>
-                <p><strong>電子郵件：</strong><input type="email" name="email" value="tom@example.com"></p>
-                <p><strong>電話：</strong><input type="tel" name="phone" value="0987654321"></p>
-                <p><strong>新密碼：</strong><input type="password" name="password" placeholder="輸入新密碼"></p>
+            <form class="edit-profile-form" method="post">
+                <input type="hidden" id="id" name="id">
+                <p><strong>姓名：</strong><input type="text" id="name" name="name" placeholder="請輸入姓名"></p>
+                <p><strong>電子郵件：</strong><input type="email" id="email" name="email" placeholder="請輸入電子郵件"></p>
+                <p><strong>電話：</strong><input type="tel" id="phone" name="phone" placeholder="請輸入電話"></p>
+                <p><strong>新密碼：</strong><input type="password" id="password" name="password" placeholder="輸入新密碼"></p>
                 <button type="submit" class="btn">保存變更</button>
                 <button type="button" class="btn" onclick="cancelEdit()">取消</button>
             </form>
@@ -252,6 +254,80 @@
         document.getElementById('edit-profile').style.display = 'none';
         document.getElementById('profile').style.display = 'block';
     }
+
+//登入後顯示管理中心個人資料
+$(function () {
+    const url = "/admin/adminInformation";
+    $.ajax({
+        url,
+        type: "GET",
+        success: function(response) {
+            if (response.code === 1) {
+                const admin = response.data;
+                // 將使用者資料塞到畫面上
+                $("#id").val(admin.id);//隱藏欄位
+                $("#admin-name").text(admin.name);
+                $("#admin-email").text(admin.email);
+                $("#admin-phone").text(admin.phone);
+            } else {
+                alert("尚未登入，請先登入！");
+                window.location.href = "/login.html"; // 跳回登入頁
+            }
+        },
+        error: function(xhr) {
+            alert("系統錯誤，請重新登入！");
+            window.location.href = "/login.html"; // 跳回登入頁
+        }
+    });
+
+});
+
+//登出
+$("#out").on("click", function(event) {
+    event.preventDefault(); // 防止a標籤預設跳轉
+        const url = "/admin/logout";
+        $.ajax({
+            url,
+            type: "GET",
+            success: function(response) {
+                if(response.code === 1){
+                   window.location.href = "/login.html";
+                }
+            },
+            error: function(xhr) {
+                alert("登出失敗，請稍後再試！");
+            }
+    });
+});
+
+//修改管理員資料
+$(".edit-profile-form").on("submit", function(event) {
+    event.preventDefault(); // 防止a標籤預設跳轉
+        const url = "/admin/updateAdmin";
+    const data = {
+            id: $("#id").val(),//隱藏欄位,少了這個就無法修改,無法執行SQL
+            name: $("#name").val(),
+            email: $("#email").val(),
+            phone: $("#phone").val(),
+            password: $("#password").val()
+            };
+        $.ajax({
+            url,
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function(response) {
+                if(response.code === 1){
+                   alert("修改成功")
+                   location.reload(); // 重新載入/admin/userInformation頁面，讓最新資料顯示,這樣後端會自動重新提交sessionUser回傳到前端
+                }
+            },
+            error: function(xhr) {
+                alert("修改失敗");
+            }
+    });
+});
+
 </script>
 
 </body>

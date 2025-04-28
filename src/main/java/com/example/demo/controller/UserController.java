@@ -31,7 +31,7 @@ public class UserController {
         return JsonResult.ok();
     }
 
-    //會員中心顯示user相關信息
+    //顯示會員中心個人資料
     //從登入狀態session取得封裝的UserLoginVO的session對象,在傳遞到後端userService
     //將獲取到的session,在強轉到UserLoginVO,在傳遞到前端
     //http://localhost:8080/user.html 直接訪問會員中心會被過濾器攔截
@@ -39,9 +39,10 @@ public class UserController {
     public JsonResult userInformation(HttpSession session){
         return userService.userByInformation(session);
     }
+
     //修改會員中心資料
     @PostMapping("/updateUser")
-    public JsonResult updateUser(@RequestBody UserRegisterDTO userRegisterDTO){
-        return userService.updateUser(userRegisterDTO);
+    public JsonResult updateUser(@RequestBody UserRegisterDTO userRegisterDTO,HttpSession session){
+        return userService.updateUser(userRegisterDTO,session);
     }
 }

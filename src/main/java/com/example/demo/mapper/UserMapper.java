@@ -17,4 +17,6 @@ public interface UserMapper {
     User getUserByAccount(String account);//判斷帳號是否重複
 
     User selectUserByEmail(String email);//忘記密碼(查詢所有的email)
+
+    User selectUserById(Integer id);
 }
