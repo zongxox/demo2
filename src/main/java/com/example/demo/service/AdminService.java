@@ -10,5 +10,5 @@ public interface AdminService {
 
     JsonResult updateAdmin(AdminRegisterDTO adminRegisterDTO, HttpSession session);//修改管理中心資料
 
-    JsonResult selectUserById(UserRegisterDTO userRegisterDTO);//查詢用戶
+    JsonResult selectUserByAccount(UserRegisterDTO userRegisterDTO);//查詢用戶
 }

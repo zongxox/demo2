@@ -40,11 +40,11 @@
     </select>
 
 <!--查詢用戶-->
-    <select id="selectUserById" resultType="com.example.demo.entity.User">
-        SELECT id,name,phone,email,is_admin,created_time FROM user
+    <select id="selectUserByAccount" resultType="com.example.demo.entity.User">
+        SELECT id,account,name,phone,email,is_admin,created_time FROM user
         <where>
-            <if test="id != null">
-                and id = #{id}
+            <if test="account != null and account != ''">
+                and account = #{account}
             </if>
         </where>
     </select>

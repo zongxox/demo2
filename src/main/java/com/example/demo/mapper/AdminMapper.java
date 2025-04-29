@@ -15,5 +15,5 @@ public interface AdminMapper {
 
     Admin selectAdminById(int id);//查詢adminId
 
-    List<User> selectUserById(Integer id);//查詢用戶
+    List<User> selectUserByAccount(String account);//查詢用戶
 }

@@ -176,13 +176,14 @@
             <div class="user-management">
                 <h3>用戶管理</h3>
                 <div style="margin-bottom: 10px;">
-                    <input type="text" id="userIdInput" placeholder="請輸入用戶ID" style="padding:5px;">
+                    <input type="text" id="userIdInput" placeholder="請輸入用戶帳號" style="padding:5px;">
                     <button id="userIdBtn" type="submit" style="padding:5px;">查詢</button>
                 </div>
                 <table class="user-table">
                     <thead>
                     <tr>
                         <th>用戶ID</th>
+                        <th>用戶帳號</th>
                         <th>用戶名</th>
                         <th>電子郵件</th>
                         <th>註冊日期</th>
@@ -329,9 +330,9 @@ $(function() {
    $("#userIdBtn").on("click", function(event) {
         // 阻止預設送出表單
         event.preventDefault();
-    const url = "/admin/selectUserById";
-    const data = {id:$("#userIdInput").val()}
-    console.log("前端輸入的用戶ID是：", data);  //F12 查看控制台是否有將值傳送出去
+    const url = "/admin/selectUserByAccount";
+    const data = {account:$("#userIdInput").val()}
+    console.log("前端輸入的用戶帳號是：", data.account);  //F12 查看控制台是否有將值傳送出去
     $.ajax({
         url,
         type: "POST",
@@ -345,6 +346,7 @@ $(function() {
                     response.data.forEach(datas => {
                       const tr = $("<tr></tr>"); //jQuery創建tr
                       $("<td></td>").text(datas.id).appendTo(tr);
+                      $("<td></td>").text(datas.account).appendTo(tr);
                       $("<td></td>").text(datas.name).appendTo(tr);
                       $("<td></td>").text(datas.email).appendTo(tr);
                       $("<td></td>").text(datas.created_time).appendTo(tr);

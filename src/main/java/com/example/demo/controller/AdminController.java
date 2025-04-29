@@ -32,9 +32,9 @@ public class AdminController {
     public JsonResult updateAdmin(@RequestBody AdminRegisterDTO adminRegisterDTO,HttpSession session){
         return adminServiceImpl.updateAdmin(adminRegisterDTO,session);
     }
-
-    @PostMapping("/selectUserById")
-    public JsonResult selectUserById(@RequestBody UserRegisterDTO userRegisterDTO){
-        return adminServiceImpl.selectUserById(userRegisterDTO);
+    //查詢用戶
+    @PostMapping("/selectUserByAccount")
+    public JsonResult selectUserByAccount(@RequestBody UserRegisterDTO userRegisterDTO){
+        return adminServiceImpl.selectUserByAccount(userRegisterDTO);
     }
 }

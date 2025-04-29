@@ -50,9 +50,9 @@ public class AdminServiceImpl implements AdminService {
 
     //查詢用戶
     @Override
-    public JsonResult selectUserById(UserRegisterDTO userRegisterDTO) {//接收前端封裝傳來的id
-        Integer id = userRegisterDTO.getId();//獲取id值
-        List<User> user = adminMapper.selectUserById(id);//把查詢到的id紀錄 存到 user 集合
+    public JsonResult selectUserByAccount(UserRegisterDTO userRegisterDTO) {
+        String account = userRegisterDTO.getAccount();//獲取account值
+        List<User> user = adminMapper.selectUserByAccount(account);//把查詢到的account紀錄 存到 user 集合
         List<UserLoginVO> voList  = new ArrayList<>();// List 用來存放封裝好的 UserLoginVO 物件
         for (User u : user) {//循環每一個 user裡面的值
             UserLoginVO vo = new UserLoginVO();//創建後端回應對象
@@ -61,4 +61,5 @@ public class AdminServiceImpl implements AdminService {
         }
         return JsonResult.ok(voList);//將添加好的每一筆回應給前端
     }
+
 }
