@@ -175,6 +175,10 @@
         <div id="user-management" class="content">
             <div class="user-management">
                 <h3>用戶管理</h3>
+                <div style="margin-bottom: 10px;">
+                    <input type="text" id="userIdInput" placeholder="請輸入用戶ID" style="padding:5px;">
+                    <button id="userIdBtn" type="submit" style="padding:5px;">查詢</button>
+                </div>
                 <table class="user-table">
                     <thead>
                     <tr>
@@ -182,24 +186,10 @@
                         <th>用戶名</th>
                         <th>電子郵件</th>
                         <th>註冊日期</th>
-                        <th>操作</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>#001</td>
-                        <td>張三</td>
-                        <td>zhangsan@example.com</td>
-                        <td>2022-03-15</td>
-                        <td><button class="btn" onclick="alert('編輯用戶')">編輯</button></td>
-                    </tr>
-                    <tr>
-                        <td>#002</td>
-                        <td>王五</td>
-                        <td>wangwu@example.com</td>
-                        <td>2022-04-20</td>
-                        <td><button class="btn" onclick="alert('編輯用戶')">編輯</button></td>
-                    </tr>
+
                     </tbody>
                 </table>
             </div>
@@ -209,6 +199,10 @@
         <div id="order-management" class="content">
             <div class="order-management">
                 <h3>訂單管理</h3>
+                <div style="margin-bottom: 10px;">
+                    <input type="text" id="orderSearchInput" placeholder="請輸入訂單編號" style="padding:5px;">
+                    <button id="orderSearchBtn" style="padding:5px;">查詢</button>
+                </div>
                 <table class="orders-table">
                     <thead>
                     <tr>
@@ -327,6 +321,48 @@ $(".edit-profile-form").on("submit", function(event) {
             }
     });
 });
+
+
+//動態id查詢用戶
+$(function() {
+    // 2. 發送AJAX請求
+   $("#userIdBtn").on("click", function(event) {
+        // 阻止預設送出表單
+        event.preventDefault();
+    const url = "/admin/selectUserById";
+    const data = {id:$("#userIdInput").val()}
+    console.log("前端輸入的用戶ID是：", data);  //F12 查看控制台是否有將值傳送出去
+    $.ajax({
+        url,
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: function(response) {
+            if (response.code === 1) {
+                 const tbody = $(".user-table tbody");
+                 tbody.empty(); // jQuery 每一次執行都會先清空tbody 以免會有舊資料
+                    response.data.forEach(datas => {
+                      const tr = $("<tr></tr>"); //jQuery創建tr
+                      $("<td></td>").text(datas.id).appendTo(tr);
+                      $("<td></td>").text(datas.name).appendTo(tr);
+                      $("<td></td>").text(datas.email).appendTo(tr);
+                      $("<td></td>").text(datas.created_time).appendTo(tr);
+                    tbody.append(tr); // 把tr加到tbody
+               });
+            } else {
+                alert("錯誤：" + response.msg);
+            }
+        },
+        error: function(xhr) {
+            // 4. 失敗的話會執行這裡
+            console.error(xhr);
+            alert("系統錯誤！");
+        }
+        });
+    });
+});
+
 
 </script>
 

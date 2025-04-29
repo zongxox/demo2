@@ -186,6 +186,12 @@
         <!-- 我的訂單區 -->
         <div id="orders" class="content">
             <h3>我的訂單</h3>
+
+            <div style="margin-bottom: 10px;">
+                <input type="text" id="orderSearchInput" placeholder="請輸入訂單編號" style="padding:5px;">
+                <button id="orderSearchBtn" style="padding:5px;">查詢</button>
+            </div>
+
             <table class="orders-table">
                 <thead>
                 <tr>
@@ -227,6 +233,7 @@
         document.getElementById('edit-profile').style.display = 'none';//隱藏編輯資料
         document.getElementById('profile').style.display = 'block';//顯示會員資料
     }
+
 
 //登入後顯示會員中心個人資料
 $(function () {

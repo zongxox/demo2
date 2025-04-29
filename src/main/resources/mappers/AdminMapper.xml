@@ -38,4 +38,14 @@
     <select id="selectAdminById" resultType="com.example.demo.entity.Admin">
         SELECT id,account,password,name,phone,email,is_admin FROM admin WHERE id = #{id}
     </select>
+
+<!--查詢用戶-->
+    <select id="selectUserById" resultType="com.example.demo.entity.User">
+        SELECT id,name,phone,email,is_admin,created_time FROM user
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+        </where>
+    </select>
 </mapper>

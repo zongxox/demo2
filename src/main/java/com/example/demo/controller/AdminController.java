@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.AdminRegisterDTO;
+import com.example.demo.dto.UserRegisterDTO;
 import com.example.demo.response.JsonResult;
 import com.example.demo.service.impl.AdminServiceImpl;
 import jakarta.servlet.http.HttpSession;
@@ -32,4 +33,8 @@ public class AdminController {
         return adminServiceImpl.updateAdmin(adminRegisterDTO,session);
     }
 
+    @PostMapping("/selectUserById")
+    public JsonResult selectUserById(@RequestBody UserRegisterDTO userRegisterDTO){
+        return adminServiceImpl.selectUserById(userRegisterDTO);
+    }
 }

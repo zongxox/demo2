@@ -3,16 +3,22 @@ package com.example.demo.service.impl;
 
 
 import com.example.demo.dto.AdminRegisterDTO;
+import com.example.demo.dto.UserRegisterDTO;
 import com.example.demo.entity.Admin;
+import com.example.demo.entity.User;
 import com.example.demo.mapper.AdminMapper;
 import com.example.demo.response.JsonResult;
 import com.example.demo.response.StatusCode;
 import com.example.demo.service.AdminService;
 import com.example.demo.vo.AdminLoginVO;
+import com.example.demo.vo.UserLoginVO;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -40,5 +46,19 @@ public class AdminServiceImpl implements AdminService {
             return JsonResult.ok(vo);//在用vo回應前端
         }
         return new JsonResult(StatusCode.OPERATION_FAILED);
+    }
+
+    //查詢用戶
+    @Override
+    public JsonResult selectUserById(UserRegisterDTO userRegisterDTO) {//接收前端封裝傳來的id
+        Integer id = userRegisterDTO.getId();//獲取id值
+        List<User> user = adminMapper.selectUserById(id);//把查詢到的id紀錄 存到 user 集合
+        List<UserLoginVO> voList  = new ArrayList<>();// List 用來存放封裝好的 UserLoginVO 物件
+        for (User u : user) {//循環每一個 user裡面的值
+            UserLoginVO vo = new UserLoginVO();//創建後端回應對象
+            BeanUtils.copyProperties(u,vo);//把user的結果屬性複製到vo對象的屬性
+            voList.add(vo);//再把每一筆的屬性資料添加給voList集合
+        }
+        return JsonResult.ok(voList);//將添加好的每一筆回應給前端
     }
 }
