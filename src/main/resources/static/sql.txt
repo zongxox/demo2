@@ -6,20 +6,39 @@ USE Shopping;
 
 -- 建立 user 表
 CREATE TABLE user (
+    id INT AUTO_INCREMENT PRIMARY KEY,                      -- 使用者 ID，自動遞增
+    account VARCHAR(50) NOT NULL UNIQUE,                    -- 使用者帳號，不可重複
+    password VARCHAR(100) NOT NULL,                         -- 密碼（建議後端使用 bcrypt 加密）
+    name VARCHAR(100) NOT NULL,                             -- 使用者姓名
+    phone VARCHAR(20),                                      -- 電話號碼（可選填）
+    email VARCHAR(100) NOT NULL UNIQUE,                     -- 電子信箱，唯一並必填
+    is_admin TINYINT(1) DEFAULT 0,                          -- 是否為管理員（0 = 否，1 = 是）
+
+    reset_token VARCHAR(255),                               -- 忘記密碼的重設 token
+    reset_token_expire DATETIME,                            -- 重設密碼的 token 過期時間
+
+    email_verify_token VARCHAR(255),                        -- 註冊時寄出的 email 驗證 token
+    email_verify_token_expire DATETIME,                     -- 驗證信的 token 過期時間（例如 30 分鐘）
+    email_verified TINYINT(1) DEFAULT 0,                    -- 是否完成 email 驗證（0 = 否，1 = 是）
+
+    created_time DATETIME DEFAULT CURRENT_TIMESTAMP,        -- 帳號建立時間
+    updated_time DATETIME DEFAULT CURRENT_TIMESTAMP
+                   ON UPDATE CURRENT_TIMESTAMP              -- 最後更新時間
+);
+
+
+CREATE TABLE admin (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    account VARCHAR(50) NOT NULL UNIQUE,
+    account VARCHAR(100) NOT NULL UNIQUE,  -- 新增帳號欄位並加上唯一約束
     password VARCHAR(100) NOT NULL,
     name VARCHAR(100) NOT NULL,
-    phone VARCHAR(20),
     email VARCHAR(100),
+    phone VARCHAR(20),
     is_admin TINYINT(1) DEFAULT 0,
-    reset_token VARCHAR(255),
-    reset_token_expire DATETIME,
-    email_verify_token VARCHAR(255),
-    email_verified TINYINT(1) DEFAULT 0,
     created_time DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
 
 
 CREATE TABLE admin (

@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 //對應資料庫
 @Data
@@ -15,8 +16,8 @@ public class Admin {
     private String phone;
     private Boolean is_admin;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")  // 使用 @JsonFormat 來格式化返回的日期
-    private Date created_time;
+    private LocalDateTime created_time;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")  // 使用 @JsonFormat 來格式化返回的日期
-    private Date updated_time;
+    private LocalDateTime updated_time;
 
 }

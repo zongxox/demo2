@@ -51,6 +51,7 @@ public class UserController {
 //    public JsonResult selectUserByEmail(@RequestBody UserRegisterDTO userRegisterDTO){
 //        return userServiceImpl.selectUserByEmail(userRegisterDTO);
 //    }
+
     //寄出email
     @PostMapping("/sendResetPasswordEmail")
     public JsonResult sendResetPasswordEmail(@RequestBody UserRegisterDTO userRegisterDTO) {

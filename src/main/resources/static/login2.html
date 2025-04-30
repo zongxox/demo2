@@ -94,7 +94,7 @@ $("#forgotPasswordForm").on("submit", function(event) {
     event.preventDefault(); // 阻止表單真正提交
 
     const email = $("#email").val().trim();
-    const emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$/;
+    const emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z]+\.[a-zA-Z]{2,}$/;
 
     if (!email) {
         alert("請輸入 Email");

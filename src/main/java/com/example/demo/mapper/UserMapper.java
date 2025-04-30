@@ -26,5 +26,6 @@ public interface UserMapper {
 
     int updatePasswordResetToken(String reset_token,String password);//基於reset_token 去修改密碼 要把token跟時間清空
 
+    User selectTokenTime(String reset_token);//基於token查詢數據庫是否過期
 
 }

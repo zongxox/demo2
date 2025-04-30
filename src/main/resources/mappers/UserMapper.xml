@@ -62,6 +62,11 @@
         WHERE email = #{email}
     </update>
 
+<!--基於token查詢數據庫是否過期-->
+    <select id="selectTokenTime" resultType="com.example.demo.entity.User">
+        SELECT * FROM user WHERE  reset_token = #{reset_token}
+    </select>
+
 <!--基於reset_token 去修改密碼 要把token跟時間清空-->
     <update id="updatePasswordResetToken">
         UPDATE user SET

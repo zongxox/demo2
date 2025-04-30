@@ -40,11 +40,12 @@ public class UserServiceImpl implements UserService {
         }
 
         // 不允許符號 ._-+%，且網域與帳號皆僅限英數
-        String emailRegex = "^[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z]{2,}$";
-        if (!Pattern.matches(emailRegex, email)) {
+        //String emailRegex = "^[a-zA-Z0-9]+@[a-zA-Z]+\\.[a-zA-Z]{2,}$";
+        //String email = "user@example.com";
+        String emailRegex = "^[a-zA-Z0-9]+@[a-zA-Z]+\\.[a-zA-Z]{2,}$";
+        if (!Pattern.matches(emailRegex, email)) {//判斷emailRegex跟email 是否
             return new JsonResult(StatusCode.PARAM_ERROR, "Email 格式不正確");
         }
-
 
         // 查詢帳號是否重複
         User existingUser = userMapper.getUserByAccount(userRegisterDTO.getAccount());
@@ -124,12 +125,15 @@ public class UserServiceImpl implements UserService {
             return new JsonResult(StatusCode.PARAM_ERROR, "Email 不可為空"); // 返回參數錯誤
         }
 
-        // Email 格式驗證
-        String emailRegex = "^[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z]{2,}$";
-        if (!Pattern.matches(emailRegex, email)) {
+        //email 格式驗證
+        //Pattern.matches()判斷某個字串是否完全符合一個正規表達式的格式。
+        //emailRegex自訂義正規表達式,email要比對的內容
+        String emailRegex = "^[a-zA-Z0-9]+@[a-zA-Z]+\\.[a-zA-Z]{2,}$";
+        if (!Pattern.matches(emailRegex, email)) {//先判斷 對或不對 再用!去反轉結果
             return new JsonResult(StatusCode.PARAM_ERROR, "Email 格式不正確"); // 格式錯誤也回傳參數錯誤
         }
 
+        //查詢email存不存在
         User user = userMapper.selectUserByEmail(email); // 用 email 查詢使用者資料
         if (user == null) { // 如果找不到該 email
             return new JsonResult(StatusCode.EMAIL_NOT_FOUND, "查無此 Email"); // 回傳查無此 Email
@@ -139,8 +143,9 @@ public class UserServiceImpl implements UserService {
         LocalDateTime reset_token_expire = LocalDateTime.now().plusMinutes(30); // 設定 token 過期時間為 30 分鐘後
         userMapper.sendResetPasswordEmail(email, reset_token, reset_token_expire); // 更新資料庫，寫入 token 與過期時間
 
+
         SimpleMailMessage message = new SimpleMailMessage(); // 建立 email 訊息物件
-        message.setTo(email); // 設定收件人為查詢到的 email
+        message.setTo(email); // 設定收件人為查詢到的 email <---這裡不太懂,傳入的不應該是 上面的user嗎?
         message.setSubject("您的密碼重設連結"); // 設定信件主旨
         message.setText("請點擊以下連結重設密碼（30 分鐘內有效）：\n" +
                 "http://localhost:8080/reset-password.html?token=" + reset_token); // 設定信件內容（帶上 token 的連結）
@@ -154,8 +159,22 @@ public class UserServiceImpl implements UserService {
     public JsonResult updatePasswordResetToken(UserRegisterDTO userRegisterDTO) {
         String reset_token = userRegisterDTO.getReset_token(); // 從 DTO 取得前端傳來的 token
         String password = userRegisterDTO.getPassword(); // 取得新密碼
+        User user = userMapper.selectTokenTime(reset_token);
 
-        int rows = userMapper.updatePasswordResetToken(reset_token,password); // 執行資料庫更新（更新密碼、清除 token）
+        //根據token 查詢用戶存不存在
+        if(user == null){
+            return new JsonResult(StatusCode.PARAM_ERROR,"無效的連結");
+        }
+
+        //用戶存在的話 判斷token是否過期
+        //isAfter(),判斷是否超過自己設定的時間(設定了30分),已超過就代表連結過期
+        LocalDateTime reset_token_expire = user.getReset_token_expire();
+        if(reset_token_expire == null || LocalDateTime.now().isAfter(reset_token_expire)){
+            return new JsonResult(StatusCode.PARAM_ERROR,"連結已過期,請重新申請");
+        }
+
+        //沒有過期的話更新資料庫
+        int rows = userMapper.updatePasswordResetToken(reset_token,password); // 執行資料庫更新（更新密碼、清除 token及時間）
         if (rows > 0) {
             return JsonResult.ok("密碼已更新成功"); // 回傳成功訊息
         }
