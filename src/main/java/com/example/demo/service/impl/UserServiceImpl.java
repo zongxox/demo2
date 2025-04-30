@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
     @Autowired
-    private JavaMailSender mailSender;
+    private JavaMailSender javaMailSender;
 
     //註冊
     @Override
@@ -118,9 +118,10 @@ public class UserServiceImpl implements UserService {
     //寄出email
     @Override
     public JsonResult sendResetPasswordEmail(UserRegisterDTO userRegisterDTO) {
-        String email = userRegisterDTO.getEmail();
-        if (email == null || email.trim().isEmpty()) {//判斷是否有空白
-            return new JsonResult(StatusCode.PARAM_ERROR, "Email 不可為空");
+        String email = userRegisterDTO.getEmail(); // 從 DTO 取得前端傳來的 email
+
+        if (email == null || email.trim().isEmpty()) { // 檢查 email 是否為空或只有空白
+            return new JsonResult(StatusCode.PARAM_ERROR, "Email 不可為空"); // 返回參數錯誤
         }
 
         // Email 格式驗證
@@ -129,31 +130,35 @@ public class UserServiceImpl implements UserService {
             return new JsonResult(StatusCode.PARAM_ERROR, "Email 格式不正確"); // 格式錯誤也回傳參數錯誤
         }
 
-        User user = userMapper.selectUserByEmail(email);//將查詢到的email給user
-        if (user == null) {//判斷是不是空值
-            return new JsonResult(StatusCode.EMAIL_NOT_FOUND, "查無此 Email");
+        User user = userMapper.selectUserByEmail(email); // 用 email 查詢使用者資料
+        if (user == null) { // 如果找不到該 email
+            return new JsonResult(StatusCode.EMAIL_NOT_FOUND, "查無此 Email"); // 回傳查無此 Email
         }
 
-        String reset_token = UUID.randomUUID().toString();
-        LocalDateTime reset_token_expire = LocalDateTime.now().plusMinutes(30);
-        userMapper.sendResetPasswordEmail(email, reset_token, reset_token_expire);
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(email);//查詢到的email
-        message.setSubject("您的密碼重設連結");//Email的主旨
+        String reset_token = UUID.randomUUID().toString(); // 產生唯一重設密碼的 token（防止被猜）
+        LocalDateTime reset_token_expire = LocalDateTime.now().plusMinutes(30); // 設定 token 過期時間為 30 分鐘後
+        userMapper.sendResetPasswordEmail(email, reset_token, reset_token_expire); // 更新資料庫，寫入 token 與過期時間
+
+        SimpleMailMessage message = new SimpleMailMessage(); // 建立 email 訊息物件
+        message.setTo(email); // 設定收件人為查詢到的 email
+        message.setSubject("您的密碼重設連結"); // 設定信件主旨
         message.setText("請點擊以下連結重設密碼（30 分鐘內有效）：\n" +
-                "http://localhost:8080/reset-password.html?token=" + reset_token);
-        mailSender.send(message);
-        return JsonResult.ok("密碼重設連結已寄出，請查收 Email");
+                "http://localhost:8080/reset-password.html?token=" + reset_token); // 設定信件內容（帶上 token 的連結）
+        javaMailSender.send(message); // 寄出 email
+
+        return JsonResult.ok("密碼重設連結已寄出，請查收 Email"); // 回傳成功訊息
     }
 
     //基於reset_token 去修改密碼 要把token跟時間清空
+    @Override
     public JsonResult updatePasswordResetToken(UserRegisterDTO userRegisterDTO) {
-        String reset_token = userRegisterDTO.getReset_token();
-        String password = userRegisterDTO.getPassword();
-        int rows = userMapper.updatePasswordResetToken(reset_token, password);
+        String reset_token = userRegisterDTO.getReset_token(); // 從 DTO 取得前端傳來的 token
+        String password = userRegisterDTO.getPassword(); // 取得新密碼
+
+        int rows = userMapper.updatePasswordResetToken(password, reset_token); // 執行資料庫更新（更新密碼、清除 token）
         if (rows > 0) {
-            return JsonResult.ok("密碼已更新成功");
+            return JsonResult.ok("密碼已更新成功"); // 回傳成功訊息
         }
-        return new JsonResult(StatusCode.OPERATION_FAILED,"密碼更新失敗");
+        return new JsonResult(StatusCode.OPERATION_FAILED, "密碼更新失敗"); // 若失敗，回傳錯誤狀態
     }
 }

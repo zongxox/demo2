@@ -25,14 +25,6 @@
         SELECT id,account,password,name,phone,email,is_admin,created_time,updated_time FROM user WHERE email = #{email}
     </select>
 
-<!--寄出email-->
-    <update id="sendResetPasswordEmail">
-        UPDATE user
-        set reset_token = #{reset_token},
-        reset_token_expire = #{reset_token_expire}
-        WHERE email = #{email}
-    </update>
-
 <!--修改會員中心資料-->
     <update id="updateUser">
         UPDATE user
@@ -61,6 +53,14 @@
     <select id="selectUserById" resultType="com.example.demo.entity.User">
         SELECT id,account,password,name,phone,email,is_admin FROM user WHERE id = #{id}
     </select>
+
+    <!--寄出email-->
+    <update id="sendResetPasswordEmail">
+        UPDATE user
+        set reset_token = #{reset_token},
+        reset_token_expire = #{reset_token_expire}
+        WHERE email = #{email}
+    </update>
 
 <!--基於reset_token 去修改密碼 要把token跟時間清空-->
     <update id="updatePasswordResetToken">
