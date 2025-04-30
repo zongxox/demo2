@@ -155,7 +155,7 @@ public class UserServiceImpl implements UserService {
         String reset_token = userRegisterDTO.getReset_token(); // 從 DTO 取得前端傳來的 token
         String password = userRegisterDTO.getPassword(); // 取得新密碼
 
-        int rows = userMapper.updatePasswordResetToken(password, reset_token); // 執行資料庫更新（更新密碼、清除 token）
+        int rows = userMapper.updatePasswordResetToken(reset_token,password); // 執行資料庫更新（更新密碼、清除 token）
         if (rows > 0) {
             return JsonResult.ok("密碼已更新成功"); // 回傳成功訊息
         }
