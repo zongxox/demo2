@@ -17,7 +17,8 @@ public enum StatusCode {
     OPERATION_FAILED(1004, "操作失敗"),
     PARAM_ERROR(1005, "參數錯誤"),
     NO_PERMISSION(1006, "沒有權限"),
-    SYSTEM_ERROR(1007, "系統錯誤，請稍後再試");
+    SYSTEM_ERROR(1007, "系統錯誤，請稍後再試"),
+    EMAIL_NOT_FOUND(1008, "Email 查無資料");
     private Integer code; //回應狀態碼
     private String msg; //回應狀態信息結果
 

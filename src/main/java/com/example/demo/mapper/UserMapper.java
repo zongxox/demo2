@@ -3,6 +3,8 @@ package com.example.demo.mapper;
 import com.example.demo.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.time.LocalDateTime;
+
 
 //連接資料庫，寫 SQL 查資料
 @Mapper
@@ -19,4 +21,10 @@ public interface UserMapper {
     User selectUserByEmail(String email);//忘記密碼(查詢所有的email)
 
     User selectUserById(Integer id);//查詢userId
+
+    int sendResetPasswordEmail(String email, String reset_token, LocalDateTime reset_token_expire);//寄出email
+
+    int updatePasswordResetToken(String reset_token,String password);//基於reset_token 去修改密碼 要把token跟時間清空
+
+
 }

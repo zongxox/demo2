@@ -12,4 +12,5 @@ public class UserRegisterDTO {
     private String name;
     private String phone;
     private String email;
+    private String reset_token;
 }

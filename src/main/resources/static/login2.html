@@ -88,8 +88,46 @@
     <p><a href="login.html">返回登入頁</a></p>
 </div>
 </body>
-<script>
 
+<script>
+$("#forgotPasswordForm").on("submit", function(event) {
+    event.preventDefault(); // 阻止表單真正提交
+
+    const email = $("#email").val().trim();
+    const emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$/;
+
+    if (!email) {
+        alert("請輸入 Email");
+        return;
+    }
+
+    if (!emailRegex.test(email)) {
+        alert("Email 格式不正確");
+        return;
+    }
+
+    const url = "/user/sendResetPasswordEmail";
+
+    $.ajax({
+        url: url,
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ email: email }),
+        success: function(response) {
+            if (response.code === 1) {
+                alert("重設密碼連結已寄出，請至信箱查看！");
+                setTimeout(() => {
+                    window.location.href = "login.html";
+                }, 3000);
+            } else {
+                alert(response.msg || "查無此 Email");
+            }
+        },
+        error: function() {
+            alert("伺服器錯誤，請稍後再試");
+        }
+    });
+});
 </script>
 
 </html>

@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 //Controller 接收資料前端 ➔ 丟給Service ➔ 傳回前端資料
 @RestController
 @RequestMapping("/user")
@@ -43,4 +45,22 @@ public class UserController {
     public JsonResult updateUser(@RequestBody UserRegisterDTO userRegisterDTO,HttpSession session){
         return userServiceImpl.updateUser(userRegisterDTO,session);
     }
+
+//    //忘記密碼(查詢email)
+//    @PostMapping("/selectUserByEmail")
+//    public JsonResult selectUserByEmail(@RequestBody UserRegisterDTO userRegisterDTO){
+//        return userServiceImpl.selectUserByEmail(userRegisterDTO);
+//    }
+    //寄出email
+    @PostMapping("/sendResetPasswordEmail")
+    public JsonResult sendResetPasswordEmail(@RequestBody UserRegisterDTO userRegisterDTO) {
+        return userServiceImpl.sendResetPasswordEmail(userRegisterDTO);
+    }
+
+    //基於reset_token 去修改密碼 要把token跟時間清空
+    @PostMapping("/resetPassword")
+    public JsonResult updatePasswordResetToken(@RequestBody UserRegisterDTO userRegisterDTO){
+        return userServiceImpl.updatePasswordResetToken(userRegisterDTO);
+    }
+
 }

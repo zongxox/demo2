@@ -148,6 +148,20 @@ $(function () {
             email: $("#email").val()
         };
 
+        const emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$/;
+
+        // 空值驗證
+        if (!data.account || !data.password || !data.name || !data.phone || !data.email) {
+                $("#message").text("所有欄位皆為必填");
+        return;
+        }
+
+        // Email 格式驗證
+        if (!emailRegex.test(data.email)) {
+            $("#message").text("電子信箱格式錯誤，請輸入正確 Email");
+        return;
+        }
+
         $.ajax({
             url,
             type: 'POST',
