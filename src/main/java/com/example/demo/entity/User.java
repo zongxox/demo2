@@ -19,20 +19,20 @@ public class User {
     private Boolean is_admin; //一般會員=0 管理員=1
     private String reset_token; // 忘記密碼驗證 token
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime reset_token_expire; // 忘記密碼驗證 token 的過期時間
 
-    private String email_verify_token; //註冊驗證用 token
+    private String email_verify_token; //email註冊驗證用 token
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private LocalDateTime email_verify_token_expire; // 驗證 token 過期時間
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime email_verify_token_expire; //email驗證 token 過期時間
 
-    private Boolean email_verified; //是否已驗證 0=未驗證, 1=已驗證
+    private Boolean email_verified; //email是否已驗證 0=未驗證, 1=已驗證
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")  // 使用 @JsonFormat 來格式化返回的日期
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")  // 使用 @JsonFormat 來格式化返回的日期
     private LocalDateTime created_time;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")  // 使用 @JsonFormat 來格式化返回的日期
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")  // 使用 @JsonFormat 來格式化返回的日期
     private LocalDateTime updated_time;
 
 
