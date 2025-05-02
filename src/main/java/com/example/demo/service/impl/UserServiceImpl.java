@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     public JsonResult saveByUser(UserRegisterDTO userRegisterDTO) {
         String email = userRegisterDTO.getEmail();
 
-        // Email 空值與格式驗證
+        // email 空值與格式驗證
         if (email == null || email.trim().isEmpty()) {
             return new JsonResult(StatusCode.PARAM_ERROR, "Email 不可為空");
         }
@@ -79,15 +79,15 @@ public class UserServiceImpl implements UserService {
     //修改會員中心資料
     @Override
     public JsonResult updateUser(UserRegisterDTO userRegisterDTO, HttpSession session) {
-        User user = new User();
-        BeanUtils.copyProperties(userRegisterDTO, user);
-        int rows = userMapper.updateUser(user);
-        if (rows > 0) {
-            User userById = userMapper.selectUserById(user.getId());
-            UserLoginVO vo = new UserLoginVO();
-            BeanUtils.copyProperties(userById, vo);
-            session.setAttribute("sessionUser", vo);
-            return JsonResult.ok(vo);
+        User user = new User();//創建user對象
+        BeanUtils.copyProperties(userRegisterDTO, user);//把前端傳過來的信息封裝到user
+        int rows = userMapper.updateUser(user);//執行修改SQL
+        if (rows > 0) {//判斷是否修改成功
+            User userById = userMapper.selectUserById(user.getId());//修改成功的話就基於id查詢
+            UserLoginVO vo = new UserLoginVO();//創建回應的對象
+            BeanUtils.copyProperties(userById, vo);//把查詢到的信息封裝到vo對象
+            session.setAttribute("sessionUser", vo);//將跟新後的信息封裝到sessionUser
+            return JsonResult.ok(vo);//返回vo給前端
         }
         return new JsonResult(StatusCode.OPERATION_FAILED);
     }
@@ -145,7 +145,7 @@ public class UserServiceImpl implements UserService {
 
 
         SimpleMailMessage message = new SimpleMailMessage(); // 建立 email 訊息物件
-        message.setTo(email); // 設定收件人為查詢到的 email <---這裡不太懂,傳入的不應該是 上面的user嗎?
+        message.setTo(email); // 設定收件人為查詢到的 email 
         message.setSubject("您的密碼重設連結"); // 設定信件主旨
         message.setText("請點擊以下連結重設密碼（30 分鐘內有效）：\n" +
                 "http://localhost:8080/reset-password.html?token=" + reset_token); // 設定信件內容（帶上 token 的連結）
