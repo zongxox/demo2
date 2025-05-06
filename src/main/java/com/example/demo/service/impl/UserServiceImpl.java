@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     public JsonResult saveByUser(UserRegisterDTO userRegisterDTO) {
         String email = userRegisterDTO.getEmail();
 
-        // email 空值與格式驗證
+        // email 去除空白跟判斷是否空值
         if (email == null || email.trim().isEmpty()) {
             return new JsonResult(StatusCode.PARAM_ERROR, "Email 不可為空");
         }
@@ -42,8 +42,9 @@ public class UserServiceImpl implements UserService {
         // 不允許符號 ._-+%，且網域與帳號皆僅限英數
         //String emailRegex = "^[a-zA-Z0-9]+@[a-zA-Z]+\\.[a-zA-Z]{2,}$";
         //String email = "user@example.com";
+        //email格式驗證
         String emailRegex = "^[a-zA-Z0-9]+@[a-zA-Z]+\\.[a-zA-Z]{2,}$";
-        if (!Pattern.matches(emailRegex, email)) {//判斷emailRegex跟email 是否
+        if (!Pattern.matches(emailRegex, email)) {//判斷emailRegex跟email
             return new JsonResult(StatusCode.PARAM_ERROR, "Email 格式不正確");
         }
 
@@ -57,17 +58,56 @@ public class UserServiceImpl implements UserService {
         //前端傳過來的DTO屬性資料,轉存到Entity(user)屬性,然後再存到數據庫,所以不需要用到VO去回應
         //註冊就是收資料 ➔ 存資料，不是拿資料給前端，所以只用 DTO 和 Entity，不用 VO。
         User user = new User();
+        String email_verify_token = UUID.randomUUID().toString();//token
+        LocalDateTime email_verify_token_expire = LocalDateTime.now().plusMinutes(30);//token時間
+
         BeanUtils.copyProperties(userRegisterDTO, user);
         user.setIs_admin(false); // 註冊的使用者預設不是管理員
-
+        user.setEmail_verified(false);//是否驗證
+        user.setEmail_verify_token(email_verify_token);//token
+        user.setEmail_verify_token_expire(email_verify_token_expire);//token時間
         int rows = userMapper.saveUser(user);
-
-        if (rows > 0) {
-            return JsonResult.ok();  // 新增成功
-        } else {
-            return new JsonResult(StatusCode.OPERATION_FAILED);  // 操作失敗
+        if (rows > 0) {//註冊成功時
+            SimpleMailMessage message = new SimpleMailMessage();//建立email信息物件
+            message.setTo(user.getEmail());//獲取註冊時的email
+            message.setSubject("你的email驗證連結");
+            message.setText("http://localhost:8080/verify-email.html?token="+email_verify_token);//內容
+            javaMailSender.send(message);//寄出
+            return JsonResult.ok();//新增成功
         }
+            return new JsonResult(StatusCode.OPERATION_FAILED);  // 操作失敗
     }
+
+
+    //註冊時email驗證
+    @Override
+    public JsonResult verifyEmail(UserRegisterDTO userRegisterDTO) {
+        String email_verify_token = userRegisterDTO.getEmail_verify_token();//獲取token
+        User user = userMapper.verifyEmail(email_verify_token);//查詢token是否在數據庫
+        if(user == null){//判斷token是否在數據庫是空值
+            return new JsonResult(StatusCode.PARAM_ERROR,"無效或已使用的驗證連結");
+        }
+
+        //判斷token是否過期
+        LocalDateTime email_verify_token_expire = user.getEmail_verify_token_expire();
+        if (email_verify_token_expire==null||LocalDateTime.now().isAfter(email_verify_token_expire)){
+            return new JsonResult(StatusCode.PARAM_ERROR,"驗證連結已過期，請重新註冊或請求新連結");
+        }
+
+        //判斷是否驗證過email
+        if(user.getEmail_verified()==true){
+            return new JsonResult(StatusCode.OPERATION_FAILED,"此帳號已完成驗證，請直接登入");
+        }
+
+        //將獲取到的token,拿去修改 token及時間及email是否驗證過
+        int rows = userMapper.updateEmailToken(user.getEmail_verify_token());
+
+        if(rows>0){
+            return JsonResult.ok("email驗證成功");
+        }
+        return new JsonResult(StatusCode.OPERATION_FAILED,"驗證失敗");
+    }
+
 
     //顯示會員中心個人資料
     @Override
@@ -116,7 +156,7 @@ public class UserServiceImpl implements UserService {
 //        return new JsonResult(StatusCode.EMAIL_NOT_FOUND);//查不到時回傳錯誤狀態
 //    }
 
-    //寄出email
+    //忘記密碼 寄出email
     @Override
     public JsonResult sendResetPasswordEmail(UserRegisterDTO userRegisterDTO) {
         String email = userRegisterDTO.getEmail(); // 從 DTO 取得前端傳來的 email
@@ -145,8 +185,8 @@ public class UserServiceImpl implements UserService {
 
 
         SimpleMailMessage message = new SimpleMailMessage(); // 建立 email 訊息物件
-        message.setTo(email); // 設定收件人為查詢到的 email 
-        message.setSubject("您的密碼重設連結"); // 設定信件主旨
+        message.setTo(email); //設定收件人，就是從資料庫查出來的 email
+        message.setSubject("您的密碼重設連結"); //設定email主旨
         message.setText("請點擊以下連結重設密碼（30 分鐘內有效）：\n" +
                 "http://localhost:8080/reset-password.html?token=" + reset_token); // 設定信件內容（帶上 token 的連結）
         javaMailSender.send(message); // 寄出 email
@@ -154,7 +194,7 @@ public class UserServiceImpl implements UserService {
         return JsonResult.ok("密碼重設連結已寄出，請查收 Email"); // 回傳成功訊息
     }
 
-    //基於reset_token 去修改密碼 要把token跟時間清空
+    //忘記密碼 基於reset_token 去修改密碼 要把token跟時間清空
     @Override
     public JsonResult updatePasswordResetToken(UserRegisterDTO userRegisterDTO) {
         String reset_token = userRegisterDTO.getReset_token(); // 從 DTO 取得前端傳來的 token
@@ -180,4 +220,8 @@ public class UserServiceImpl implements UserService {
         }
         return new JsonResult(StatusCode.OPERATION_FAILED, "密碼更新失敗"); // 若失敗，回傳錯誤狀態
     }
+
+
+
+
 }

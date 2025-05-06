@@ -16,4 +16,6 @@ public interface UserService {
     JsonResult sendResetPasswordEmail(UserRegisterDTO userRegisterDTO);//寄出email
 
     JsonResult updatePasswordResetToken(UserRegisterDTO userRegisterDTO);//基於reset_token 去修改密碼 要把token跟時間清空
+
+    JsonResult verifyEmail(UserRegisterDTO userRegisterDTO);//註冊時email驗證
 }

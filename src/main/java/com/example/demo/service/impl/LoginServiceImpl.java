@@ -42,6 +42,11 @@ public class LoginServiceImpl implements LoginService {
         // 查普通用戶
         User user = userMapper.getUserByAccountPassword(account, password);//將參數拿去user數據庫做查詢
         if (user != null) {//查詢出來是空值就是false 是true就執行
+
+            if(user.getEmail_verified()==false){
+                return new JsonResult(StatusCode.EMAIL_NOT_FOUND,"email尚未驗證");
+            }
+
             UserLoginVO vo = new UserLoginVO();
             BeanUtils.copyProperties(user, vo);
             //登入時保存session

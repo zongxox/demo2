@@ -28,4 +28,8 @@ public interface UserMapper {
 
     User selectTokenTime(String reset_token);//基於token查詢數據庫是否過期
 
+    User verifyEmail(String email_verify_token);//註冊時email驗證
+
+    int updateEmailToken(String email_verify_token);//清空註冊時token跟時間
+
 }

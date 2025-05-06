@@ -271,6 +271,7 @@ $("#out").on("click", function(event) {
             type: "GET",
             success: function(response) {
                 if(response.code === 1){
+                   location.reload();
                    window.location.href = "/login.html";
                 }
             },

@@ -6,19 +6,35 @@
 
 <!--登入-->
     <select id="getUserByAccountPassword" resultType="com.example.demo.entity.User">
-        SELECT id,account,password,name,phone,email,is_admin,created_time FROM user WHERE account = #{account} AND password = #{password}
+        SELECT id,account,password,name,phone,email,is_admin,email_verified,created_time FROM user WHERE account = #{account} AND password = #{password}
     </select>
 
-<!--查詢帳號-->
+<!--判斷帳號是否重複-->
     <select id="getUserByAccount" resultType="com.example.demo.entity.User">
         SELECT account FROM user WHERE account = #{account}
     </select>
 
 <!--新增註冊-->
     <insert id="saveUser">
-        INSERT INTO user (id,account,password,name,phone,email,is_admin,created_time,updated_time)
-        VALUES(null,#{account},#{password},#{name},#{phone},#{email},#{is_admin},now(),now())
+        INSERT INTO user (id,account,password,name,phone,email,is_admin,email_verify_token,email_verified,email_verify_token_expire,created_time,updated_time)
+        VALUES(null,#{account},#{password},#{name},#{phone},#{email},#{is_admin},#{email_verify_token},#{email_verified},#{email_verify_token_expire},now(),now())
     </insert>
+
+<!--註冊時email驗證-->
+    <select id="verifyEmail" resultType="com.example.demo.entity.User">
+        SELECT * FROM user WHERE email_verify_token = #{email_verify_token}
+    </select>
+
+<!--清空註冊時token跟時間-->
+    <update id="updateEmailToken">
+        UPDATE user SET
+        email_verified = true,
+        email_verify_token = null,
+        email_verify_token_expire = null,
+        updated_time = NOW()
+        WHERE email_verify_token = #{email_verify_token}
+    </update>
+
 
 <!--查詢email-->
     <select id="selectUserByEmail" resultType="com.example.demo.entity.User">

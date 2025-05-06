@@ -148,13 +148,13 @@ $(function () {
             email: $("#email").val()
         };
 
-        const emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z]+\.[a-zA-Z]{2,}$/;
-
         // 空值驗證
         if (!data.account || !data.password || !data.name || !data.phone || !data.email) {
                 $("#message").text("所有欄位皆為必填");
         return;
         }
+
+        const emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z]+\.[a-zA-Z]{2,}$/;
 
         // Email 格式驗證
         if (!emailRegex.test(data.email)) {
@@ -171,8 +171,8 @@ $(function () {
                 // 根據後端返回的code來判斷
                 if (response.code === 1) {
                     // 註冊成功的處理
-                    alert("註冊成功！即將跳轉至登入頁面");
-                    window.location.href = "/login.html"; // 跳轉到登入頁面
+                    alert("註冊成功，請至信箱點擊驗證連結以啟用帳號");
+                    location.reload(); //重新載入註冊頁面
                 } else if (response.code === 1003) {
                     // 如果回應是帳號已存在，顯示錯誤訊息
                     $("#message").text(response.msg);

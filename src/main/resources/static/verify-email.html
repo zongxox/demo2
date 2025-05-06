@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>驗證信箱 - Clothique</title>
+    <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .verify-box {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    h2 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    p {
+      color: #666;
+      margin-bottom: 30px;
+    }
+
+    a.button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.2s ease;
+    }
+
+    a.button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+<div class="verify-box">
+    <h2>信箱驗證成功</h2>
+    <p>您的帳號已成功啟用，可以登入系統。</p>
+    <a href="login.html" class="button">前往登入</a>
+    <p id="message" style="color: red;"></p>
+</div>
+</body>
+<script>
+  // 取得網址中的參數，例如 ?token=xxxxx
+  const urlParams = new URLSearchParams(window.location.search); // 取得 URL 中的查詢字串
+  const token = urlParams.get("token"); // 從查詢字串中取得 token 值
+  const url = "/user/verifyEmail";
+    // 發送 AJAX
+    $.ajax({
+      url, // 發送到的後端 API 路徑
+      type: "POST", // 使用 POST 方法
+      contentType: "application/json", // 告知後端資料格式為 JSON
+      data: JSON.stringify({email_verify_token: token}),
+      success: function(response) { // 成功接收到後端回應時執行
+        if (response.code === 1) { // 如果回傳 code 為 1 表示成功
+          alert("email驗證成功！"); // 顯示成功提示
+          window.location.href = "/login.html"; // 自動跳轉到登入頁
+        } else {
+          $("#message").text(response.msg || "驗證失敗"); // 顯示錯誤訊息
+        }
+      },
+      error: function() { // 若 AJAX 發送或後端錯誤時
+        $("#message").text("伺服器錯誤，請稍後再試"); // 顯示伺服器錯誤訊息
+      }
+    });
+</script>
+
+</html>
