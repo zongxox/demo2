@@ -173,7 +173,7 @@ $(function () {
                     // 註冊成功的處理
                     alert("註冊成功，請至信箱點擊驗證連結以啟用帳號");
                     location.reload(); //重新載入註冊頁面
-                } else if (response.code === 1003) {
+                } else if (response.code === 1009) {
                     // 如果回應是帳號已存在，顯示錯誤訊息
                     $("#message").text(response.msg);
                 } else {

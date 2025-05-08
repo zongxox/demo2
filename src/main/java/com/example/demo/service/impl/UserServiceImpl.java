@@ -49,9 +49,14 @@ public class UserServiceImpl implements UserService {
         }
 
         // 查詢帳號是否重複
-        User existingUser = userMapper.getUserByAccount(userRegisterDTO.getAccount());
-        if (existingUser != null) { // 如果帳號重複
+        User userByAccount = userMapper.getUserByAccount(userRegisterDTO.getAccount());
+        if (userByAccount != null) { // 如果帳號重複
             return new JsonResult(StatusCode.ACCOUNT_ALREADY_EXISTS);
+        }
+        //判斷帳號及email是否重複
+        User userByEmail = userMapper.getUserByemail(userRegisterDTO.getEmail());
+        if(userByEmail != null){
+            return new JsonResult(StatusCode.EMAIL_ALREADY_EXISTS);
         }
 
         // DTO 轉存到 Entity
@@ -99,7 +104,7 @@ public class UserServiceImpl implements UserService {
             return new JsonResult(StatusCode.OPERATION_FAILED,"此帳號已完成驗證，請直接登入");
         }
 
-        //將獲取到的token,拿去修改 token及時間及email是否驗證過
+        //將獲取到的token,拿去新增 token及時間及email是否驗證過
         int rows = userMapper.updateEmailToken(user.getEmail_verify_token());
 
         if(rows>0){
